@@ -7,7 +7,8 @@ import { AppType } from 'next/dist/shared/lib/utils';
 import { ReactElement, ReactNode } from 'react';
 import superjson from 'superjson';
 import { DefaultLayout } from '../components/DefaultLayout';
-import { AppRouter } from '../server/routers/_app';
+import { AppRouter } from '~/server/routers/_app';
+import '../../styles/tailwind.css';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -43,7 +44,6 @@ function getBaseUrl() {
 }
 
 export default withTRPC<AppRouter>({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   config() {
     /**
      * If you want to use SSR, you need to use the server's full URL
