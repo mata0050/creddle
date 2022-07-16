@@ -3,7 +3,7 @@ import React from 'react';
 
 function SideNav() {
   return (
-    <div className='h-screen bg-darkGrey w-[230px] fixed z-0 pt-24 text-white'>
+    <div className='h-screen bg-darkGrey w-[230px] fixed z-0 pt-20 text-white'>
       <aside>
         <ul className='flex flex-col gap-4 items-start '>
           <li className='hover:opacity-50 border-b-[1px] w-full pb-2 pl-4 font-thin text-sm'>
