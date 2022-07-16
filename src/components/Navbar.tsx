@@ -3,13 +3,17 @@ import React from 'react';
 
 function Navbar() {
   return (
-    <nav className='bg-lightGrey b border-b-4 flex justify-between items-center p-4'>
+    <nav className='bg-lightGrey b border-b-4 flex justify-between items-center py-4 px-10 fixed w-full z-10'>
       <ul className='flex gap-4'>
         <li className='opacity-70 hover:opacity-100'>
-          <a href='/content'>Content</a>
+          <Link href='/content'>
+            <a>Content</a>
+          </Link>
         </li>
         <li className='opacity-70 hover:opacity-100'>
-          <a href='/resume'>Resume</a>
+          <Link href='/resume'>
+            <a>Resume</a>
+          </Link>
         </li>
       </ul>
 
