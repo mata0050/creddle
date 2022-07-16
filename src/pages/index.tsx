@@ -1,9 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
+import { trpc } from '../utils/trpc';
+
 
 const Home: NextPage = () => {
+  const utils = trpc.useContext();
+  const usersQuery = trpc.useQuery(['user.getAllUsers'])
+  console.log(usersQuery.data)
+
   return (
     <div className={styles.container}>
       <Head>
