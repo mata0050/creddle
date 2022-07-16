@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
       xsm: '480px',
@@ -20,18 +17,12 @@ module.exports = {
     },
     extend: {
       colors: {
-        orange: '#ef8336',
-        lightOrange: '#feead6',
-        lighterOrange: '#FEF5EA',
-        lightBrown: '#f1e8d6',
-        lighterBrown: '#fbf7f3',
-        brown: '#a29071',
-        darkBrown: '#26282c',
+        green: '#2E8686',
         white: '#ffffff',
         black: '#000000',
-        grey: '#333',
-        darkGrey: '#26282C',
-        lightGrey: '#f7f7f7',
+        grey: '#F0F0F0',
+        darkGrey: '#555555',
+        lightGrey: '#F8F8F8',
         silver: '#eee',
         warning: '#ffd200',
         danger: 'rgb(250, 7, 7)',
@@ -47,4 +38,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

@@ -7,7 +7,7 @@ type DefaultLayoutProps = { children: ReactNode };
 
 export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
-    <>
+    <div className='bg-grey'>
       <Head>
         <title>Prisma Starter</title>
         <link rel='icon' href='/favicon.ico' />
@@ -18,6 +18,6 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
       {process.env.NODE_ENV !== 'production' && (
         <ReactQueryDevtools initialIsOpen={false} />
       )}
-    </>
+    </div>
   );
 };
