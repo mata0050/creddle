@@ -1,4 +1,4 @@
-import { prisma } from '../prisma';
+import { prisma } from '../../db/prisma';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { createRouter } from '../createRouter';
