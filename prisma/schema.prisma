@@ -1,13 +1,25 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  // if you are doing migrations you will need shadow url
+  // shadowDatabaseUrl = env("SHADOW_URL")
+  referentialIntegrity= "prisma"
 }
 
 model User {
@@ -15,11 +27,12 @@ model User {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   email      String       @unique
-  firstName String
+  firstName  String
   lastName   String
   phone      String
   github     String
   location   String
+  summary    String
   education  Education[]
   employment Employment[]
   projects   Project[]
