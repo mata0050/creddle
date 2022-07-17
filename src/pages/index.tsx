@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { trpc } from '../utils/trpc';
 import { prisma } from '../db/prisma';
 
-const Home: NextPage = (props : any) => {
+export default function Home<NextPage>(props: any) {
   const utils = trpc.useContext();
   const usersQuery = trpc.useQuery(['user.getAllUsers']);
   console.log(usersQuery);
@@ -12,18 +12,22 @@ const Home: NextPage = (props : any) => {
   return (
     <div className='pt-48 px-[400px]'>
       <h1>hello</h1>
-      <code>{props.users}</code>
+      <code>{JSON.stringify(props.users)}</code>
     </div>
   );
-};
+}
 
 export const getServerSideProps = async () => {
-  const users = await prisma.user.findMany();
+  let users = await prisma.user.findMany();
+
+  users.map(x => {
+    x.createdAt = Math.floor(x.createdAt / 1000);
+    x.updatedAt = Math.floor(x.updatedAt / 1000);
+    return x;
+})
   return {
     props: {
-      users : JSON.stringify(users),
+      users,
     },
   };
 };
-
-export default Home;
