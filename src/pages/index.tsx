@@ -21,8 +21,11 @@ export const getServerSideProps = async () => {
   let users = await prisma.user.findMany();
 
   users.map(x => {
-    x.createdAt = Math.floor(x.createdAt / 1000);
-    x.updatedAt = Math.floor(x.updatedAt / 1000);
+    let created = x.createdAt as any 
+    created = Math.floor(created / 1000);
+
+    let update = x.updatedAt as any
+    update = Math.floor(update / 1000);
     return x;
 })
   return {
