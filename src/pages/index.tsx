@@ -7,7 +7,7 @@ import { prisma } from '../db/prisma';
 const Home: NextPage = (props : any) => {
   const utils = trpc.useContext();
   const usersQuery = trpc.useQuery(['user.getAllUsers']);
-  console.log(props.users);
+  console.log(usersQuery);
 
   return (
     <div className='pt-48 px-[400px]'>
