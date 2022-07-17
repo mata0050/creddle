@@ -18,19 +18,25 @@ export default function Home<NextPage>(props: any) {
 }
 
 export const getServerSideProps = async () => {
-  let users = await prisma.user.findMany();
+  const users = await prisma.user.findMany();
 
-  users.map(x => {
-    let created = x.createdAt as any 
-    created = Math.floor(created / 1000);
+  const newUser: any[] = [];
 
-    let update = x.updatedAt as any
-    update = Math.floor(update / 1000);
-    return x;
-})
+  users.map((x) => {
+    if (x.createdAt || x.updatedAt) {
+      newUser.push({
+        ...x,
+        createdAt: 'Jan',
+        updatedAt: 'Jan',
+      });
+    } else {
+      newUser.push(x);
+    }
+  });
+
   return {
     props: {
-      users,
+      users: newUser,
     },
   };
 };
