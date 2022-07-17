@@ -11,7 +11,7 @@ export default function Home<NextPage>(props: any) {
 
   return (
     <div className='pt-48 px-[400px]'>
-      <h1>hello</h1>
+      <h1 className='test-3xl'>hello</h1>
       <code>{JSON.stringify(props.users)}</code>
     </div>
   );
