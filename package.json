@@ -10,7 +10,9 @@
     "generate:prisma": "prisma generate",
     "studio": "prisma studio",
     "db:reset": "npx prisma db push --force-reset",
-    "db:push": "npx prisma db push"
+    "db:push": "npx prisma db push",
+    "postinstall": "primsa generate",
+    "ts-node": "ts-node --compiler-options \"{\"module\": \"commonjs\", \"target\": \"esnext\"}\""
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
