@@ -4,41 +4,16 @@ import Image from 'next/image';
 import { trpc } from '../utils/trpc';
 import { prisma } from '../db/prisma';
 
-export default function Home<NextPage>(props: any) {
+export default function Home<NextPage>() {
   const utils = trpc.useContext();
-  const {data, isLoading} = trpc.useQuery(['user.getAllUsers']);
+  const { data, isLoading } = trpc.useQuery(['user.getAllUsers']);
+  if (isLoading || !data) return '';
+  
   console.log(data);
-
   return (
     <div className='pt-48 px-[400px]'>
       <h1 className='test-3xl'>hello</h1>
-      <code>{JSON.stringify(data)}</code>
-      <span className='mt-36 block'></span>
-      <code>{JSON.stringify(props.users)}</code>
+      <code>{data[0]?.firstName}</code>
     </div>
   );
 }
-
-export const getServerSideProps = async () => {
-  const users = await prisma.user.findMany();
-
-  const newUser: any[] = [];
-
-  users.map((x) => {
-    if (x.createdAt || x.updatedAt) {
-      newUser.push({
-        ...x,
-        createdAt: 'Jan',
-        updatedAt: 'Jan',
-      });
-    } else {
-      newUser.push(x);
-    }
-  });
-
-  return {
-    props: {
-      users: newUser,
-    },
-  };
-};

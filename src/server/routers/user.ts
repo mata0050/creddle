@@ -3,12 +3,6 @@ import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { createRouter } from '../createRouter';
 
-// email      String       @unique
-// firsrtName String
-// lastName   String
-// phone      String
-// github     String
-// location   String
 
 const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
