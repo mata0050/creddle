@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "dev:migrate": "prisma migrate dev ",
-    "generate:prisma": "prisma generate",
     "studio": "prisma studio",
     "db:reset": "npx prisma db push --force-reset",
     "db:push": "npx prisma db push",

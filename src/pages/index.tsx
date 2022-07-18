@@ -6,12 +6,14 @@ import { prisma } from '../db/prisma';
 
 export default function Home<NextPage>(props: any) {
   const utils = trpc.useContext();
-  const usersQuery = trpc.useQuery(['user.getAllUsers']);
-  console.log(usersQuery);
+  const {data, isLoading} = trpc.useQuery(['user.getAllUsers']);
+  console.log(data);
 
   return (
     <div className='pt-48 px-[400px]'>
       <h1 className='test-3xl'>hello</h1>
+      <code>{JSON.stringify(data)}</code>
+      <span className='mt-36 block'></span>
       <code>{JSON.stringify(props.users)}</code>
     </div>
   );
