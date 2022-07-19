@@ -11,7 +11,7 @@ const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   phone: true,
   github: true,
   location: true,
-  summary: true
+  summary: true,
 });
 
 // firstName  String
@@ -42,8 +42,8 @@ export const userRouter = createRouter()
       phone: z.string(),
       github: z.string(),
       location: z.string(),
-      summary: z.string()
-    }), 
+      summary: z.string(),
+    }),
     async resolve({ input }) {
       const user = await prisma.user.create({
         data: input,
@@ -53,3 +53,26 @@ export const userRouter = createRouter()
       return user;
     },
   })
+  .mutation('edit', {
+    input: z.object({
+      id: z.string(),
+      email: z.string(),
+      firstName: z.string(),
+      lastName: z.string(),
+      phone: z.string(),
+      github: z.string(),
+      location: z.string(),
+      summary: z.string(),
+    }),
+    async resolve({ input }) {
+      const user = await prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+        select: defaultUserSelect,
+      });
+
+      return user;
+    },
+  });

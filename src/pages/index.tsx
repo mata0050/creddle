@@ -22,16 +22,25 @@ export default function Home<NextPage>() {
       {!showCreateUser && (
         <BasicInformation user={data[0]} onShowCreateUser={onShowCreateUser} />
       )}
-      {showCreateUser && <CreateUser user={data[0]} onShowCreateUser={onShowCreateUser} />}
+      {showCreateUser && (
+        <CreateEditUser user={data[0]} onShowCreateUser={onShowCreateUser} />
+      )}
     </div>
   );
 }
 
-function CreateUser({ onShowCreateUser, user }: any) {
+function CreateEditUser({ onShowCreateUser, user }: any) {
   const client = trpc.useContext();
   const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
       toast.success('Registration Successful');
+      client.invalidateQueries('user.getAllUsers');
+    },
+  });
+
+  const { mutate: editUser } = trpc.useMutation(['user.edit'], {
+    onSuccess: () => {
+      toast.success('Edit User Successful');
       client.invalidateQueries('user.getAllUsers');
     },
   });
@@ -44,7 +53,12 @@ function CreateUser({ onShowCreateUser, user }: any) {
     }
 
     try {
+      if (user) {
+        editUser({ ...data, id: user.id });
+        return onShowCreateUser();
+      }
       newUser(data);
+      onShowCreateUser();
     } catch (error) {
       toast.error('Please Filling out the application again');
     }
@@ -77,8 +91,10 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('firstName', { required: true })}
-            value={user?.firstName}
+            {...register('firstName', {
+              required: true,
+              value: user?.firstName,
+            })}
           />
         </label>
 
@@ -87,8 +103,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('lastName', { required: true })}
-            value={user?.lastName}
+            {...register('lastName', { required: true, value: user?.lastName })}
           />
         </label>
 
@@ -97,8 +112,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('phone', { required: true })}
-            value={user?.phone}
+            {...register('phone', { required: true, value: user?.phone })}
           />
         </label>
 
@@ -107,8 +121,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='email'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('email', { required: true })}
-            value={user?.email}
+            {...register('email', { required: true, value: user?.email })}
           />
         </label>
 
@@ -117,8 +130,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('github', { required: true })}
-            value={user?.github}
+            {...register('github', { required: true, value: user?.github })}
           />
         </label>
 
@@ -127,8 +139,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('location', { required: true })}
-            value={user?.location}
+            {...register('location', { required: true, value: user?.location })}
           />
         </label>
 
@@ -137,8 +148,7 @@ function CreateUser({ onShowCreateUser, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('summary', { required: true })}
-            value={user?.summary}
+            {...register('summary', { required: true, value: user?.summary })}
           />
         </label>
 
