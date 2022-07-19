@@ -22,12 +22,12 @@ export default function Home<NextPage>() {
       {!showCreateUser && (
         <BasicInformation user={data[0]} onShowCreateUser={onShowCreateUser} />
       )}
-      {showCreateUser && <CreateUser onShowCreateUser={onShowCreateUser} />}
+      {showCreateUser && <CreateUser user={data[0]} onShowCreateUser={onShowCreateUser} />}
     </div>
   );
 }
 
-function CreateUser({ onShowCreateUser }: any) {
+function CreateUser({ onShowCreateUser, user }: any) {
   const client = trpc.useContext();
   const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
@@ -76,8 +76,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>First Name</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('firstName', { required: true })}
+            value={user?.firstName}
           />
         </label>
 
@@ -85,8 +86,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Last Name</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('lastName', { required: true })}
+            value={user?.lastName}
           />
         </label>
 
@@ -94,8 +96,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Phone Number</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('phone', { required: true })}
+            value={user?.phone}
           />
         </label>
 
@@ -103,8 +106,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Email</span>
           <input
             type='email'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('email', { required: true })}
+            value={user?.email}
           />
         </label>
 
@@ -112,8 +116,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Github Username</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('github', { required: true })}
+            value={user?.github}
           />
         </label>
 
@@ -121,8 +126,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Location</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('location', { required: true })}
+            value={user?.location}
           />
         </label>
 
@@ -130,8 +136,9 @@ function CreateUser({ onShowCreateUser }: any) {
           <span className='text-gray-700'>Summary</span>
           <input
             type='text'
-            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('summary', { required: true })}
+            value={user?.summary}
           />
         </label>
 
