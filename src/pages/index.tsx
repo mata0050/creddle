@@ -1,26 +1,33 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useState } from 'react';
 import { trpc } from '../utils/trpc';
 import { prisma } from '../db/prisma';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { GrEdit } from 'react-icons/gr';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 export default function Home<NextPage>() {
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery(['user.getAllUsers']);
+  const [showCreateUser, setShowCreateUser] = useState(false);
+  const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
+
   if (isLoading || !data) return <div>Loading...</div>;
 
-  console.log(data);
   return (
     <div className=' w-[calc(100%-230px)] ml-[230px] p-20'>
-      <BasicInformation user={data[0]} />
-      <CreateUser />
+      {!showCreateUser && (
+        <BasicInformation user={data[0]} onShowCreateUser={onShowCreateUser} />
+      )}
+      {showCreateUser && <CreateUser onShowCreateUser={onShowCreateUser} />}
     </div>
   );
 }
 
-function CreateUser() {
+function CreateUser({ onShowCreateUser }: any) {
   const client = trpc.useContext();
   const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
@@ -53,10 +60,17 @@ function CreateUser() {
   return (
     <div className='mt-6 '>
       <form
-        className='grid grid-cols-1 gap-y-6  p-8 rounded-lg box-shadow'
+        className='grid grid-cols-1 gap-y-4  p-8 rounded-lg box-shadow'
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className='text-xl'>Basic Information</h1>
+        <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
+          <h1 className='text-xl'>Basic Information</h1>
+
+          <AiFillCloseCircle
+            className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
+            onClick={onShowCreateUser}
+          />
+        </div>
 
         <label className='block'>
           <span className='text-gray-700'>First Name</span>
@@ -147,19 +161,26 @@ function CreateUser() {
   );
 }
 
-function BasicInformation({ user }: any) {
+function BasicInformation({ user, onShowCreateUser }: any) {
   return (
     <div>
-      <h1>Basic Information</h1>
+      <div className='flex justify-between border-b-2 border-b-black mb-4'>
+        <h1 className='text-3xl'>Basic Information</h1>
 
-      <p>{user?.firstName}</p>
-      <p>{user?.lastName}</p>
-      <p>{user?.email}</p>
-      <p>{user?.phone}</p>
-      <p>{`github.com/${user?.github}`}</p>
-      <p>{user?.location}</p>
+        <GrEdit
+          className='text-xl hover:opacity-50 cursor-pointer'
+          onClick={onShowCreateUser}
+        />
+      </div>
 
-      <h2>Summary</h2>
+      <p className='opacity-70'>{user?.firstName}</p>
+      <p className='opacity-70'>{user?.lastName}</p>
+      <p className='opacity-70'>{user?.email}</p>
+      <p className='opacity-70'>{user?.phone}</p>
+      <p className='opacity-70'>{`github.com/${user?.github}`}</p>
+      <p className='opacity-70'>{user?.location}</p>
+
+      <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>Summary</h2>
       <p>{user?.summary}</p>
     </div>
   );
