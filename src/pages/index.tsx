@@ -13,19 +13,19 @@ export default function Home<NextPage>() {
 
   console.log(data);
   return (
-    <div className='pt-48 px-[400px]'>
-      <h1 className='test-3xl'>hello</h1>
-      <code>{data[0]?.firstName}</code>
-
+    <div className=' w-[calc(100%-230px)] ml-[230px] p-20'>
+      <BasicInformation user={data[0]} />
       <CreateUser />
     </div>
   );
 }
 
 function CreateUser() {
+  const client = trpc.useContext();
   const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
       toast.success('Registration Successful');
+      client.invalidateQueries('user.getAllUsers');
     },
   });
 
@@ -51,18 +51,18 @@ function CreateUser() {
   } = useForm();
 
   return (
-    <div className='mt-6'>
+    <div className='mt-6 '>
       <form
         className='grid grid-cols-1 gap-y-6  p-8 rounded-lg box-shadow'
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className='text-xl'>Create New User</h1>
+        <h1 className='text-xl'>Basic Information</h1>
 
         <label className='block'>
           <span className='text-gray-700'>First Name</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('firstName', { required: true })}
           />
         </label>
@@ -71,7 +71,7 @@ function CreateUser() {
           <span className='text-gray-700'>Last Name</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('lastName', { required: true })}
           />
         </label>
@@ -80,7 +80,7 @@ function CreateUser() {
           <span className='text-gray-700'>Phone Number</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('phone', { required: true })}
           />
         </label>
@@ -89,7 +89,7 @@ function CreateUser() {
           <span className='text-gray-700'>Email</span>
           <input
             type='email'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('email', { required: true })}
           />
         </label>
@@ -98,7 +98,7 @@ function CreateUser() {
           <span className='text-gray-700'>Github Username</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('github', { required: true })}
           />
         </label>
@@ -107,7 +107,7 @@ function CreateUser() {
           <span className='text-gray-700'>Location</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('location', { required: true })}
           />
         </label>
@@ -116,7 +116,7 @@ function CreateUser() {
           <span className='text-gray-700'>Summary</span>
           <input
             type='text'
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+            className='mt-1 block w-full h-8 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('summary', { required: true })}
           />
         </label>
@@ -143,6 +143,24 @@ function CreateUser() {
           )}
         </button>
       </form>
+    </div>
+  );
+}
+
+function BasicInformation({ user }: any) {
+  return (
+    <div>
+      <h1>Basic Information</h1>
+
+      <p>{user?.firstName}</p>
+      <p>{user?.lastName}</p>
+      <p>{user?.email}</p>
+      <p>{user?.phone}</p>
+      <p>{`github.com/${user?.github}`}</p>
+      <p>{user?.location}</p>
+
+      <h2>Summary</h2>
+      <p>{user?.summary}</p>
     </div>
   );
 }

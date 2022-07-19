@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Navbar from './Navbar';
 import SideNav from './SideNav';
@@ -15,6 +16,7 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
       </Head>
       <Navbar />
       <SideNav />
+      <Toaster />
       <main>{children}</main>
 
       {process.env.NODE_ENV !== 'production' && (
