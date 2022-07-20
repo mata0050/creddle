@@ -10,16 +10,16 @@
 //   url      = env("DATABASE_URL")
 // }
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   // if you are doing migrations you will need shadow url
   // shadowDatabaseUrl = env("SHADOW_URL")
-  referentialIntegrity= "prisma"
+  referentialIntegrity = "prisma"
 }
 
 model User {
@@ -32,7 +32,7 @@ model User {
   phone      String
   github     String
   location   String
-  summary    String
+  summary    String       @db.LongText
   education  Education[]
   employment Employment[]
   projects   Project[]

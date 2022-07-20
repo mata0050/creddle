@@ -145,9 +145,9 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 
         <label className='block'>
           <span className='text-gray-700'>Summary</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+          <textarea
+      
+            className='mt-1 block w-full h-20 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('summary', { required: true, value: user?.summary })}
           />
         </label>
