@@ -14,16 +14,6 @@ const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   summary: true,
 });
 
-// firstName  String
-// lastName   String
-// phone      String
-// github     String
-// location   String
-// summary    String
-// education  Education[]
-// employment Employment[]
-// projects   Project[]
-// skills     Skill[]
 
 export const userRouter = createRouter()
   .query('getAllUsers', {
