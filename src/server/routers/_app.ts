@@ -3,6 +3,7 @@
  */
 import { createRouter } from '../createRouter';
 import { userRouter } from './user';
+import { educationRouter } from './education';
 import superjson from 'superjson';
 
 /**
@@ -22,21 +23,12 @@ export const appRouter = createRouter()
    * @link https://trpc.io/docs/error-formatting
    */
   // .formatError(({ shape, error }) => { })
+
   /**
-   * Add a health check endpoint to be called with `/api/trpc/healthz`
-   */
-  .query('healthz', {
-    async resolve() {
-      return 'yay!';
-    },
-  })
-  /**
-   * Merge `postRouter` under `post.`
+   * Merge routes`
    */
   .merge('user.', userRouter)
-  /**
-   * Merge `commentRouter` under `comments.`
-   */
-  // .merge('comments.', commentRouter);
+  .merge('education.', educationRouter)
+
 
 export type AppRouter = typeof appRouter;
