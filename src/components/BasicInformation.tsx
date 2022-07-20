@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { trpc } from '../utils/trpc';
-import { prisma } from '../db/prisma';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { GrEdit } from 'react-icons/gr';

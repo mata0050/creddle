@@ -14,7 +14,6 @@ const defaultEducationSelect = Prisma.validator<Prisma.EducationSelect>()({
 
 
 
-
 export const educationRouter = createRouter()
   .query('getAll', {
     async resolve() {
