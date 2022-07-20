@@ -28,7 +28,7 @@ export default function Education() {
 
 function ViewEducation({ education, onShowCreateUser }: any) {
     return (
-      <div>
+      <div className='mt-6'>
         <div className='flex justify-between border-b-2 border-b-black mb-4'>
           <h1 className='text-3xl'>Education</h1>
   
