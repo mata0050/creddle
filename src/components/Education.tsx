@@ -13,7 +13,10 @@ export default function Education() {
   
   return (
     <div>
-        <ViewEducation education={data[0]}/>
+        {data.map((data, index) => 
+        <div key={index}>
+            <ViewEducation education={data}/>
+        </div>)}
     </div>
   )
 }
