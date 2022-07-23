@@ -12,12 +12,24 @@ const defaultEducationSelect = Prisma.validator<Prisma.EducationSelect>()({
   endDate: true,
 });
 
-
-
 export const educationRouter = createRouter()
   .query('getAll', {
     async resolve() {
       const education = await prisma.education.findMany({
+        select: defaultEducationSelect,
+      });
+      return education;
+    },
+  })
+  .query('getById', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({input}) {
+      const education = await prisma.education.findMany({
+        where: {
+          userId: input.id,
+        },
         select: defaultEducationSelect,
       });
       return education;
@@ -61,10 +73,9 @@ export const educationRouter = createRouter()
       return education;
     },
   })
-   .mutation('delete', {
+  .mutation('delete', {
     input: z.object({
       id: z.string(),
-
     }),
     async resolve({ input }) {
       const education = await prisma.education.delete({
