@@ -74,8 +74,8 @@ export const educationRouter = createRouter()
       school: z.string(),
       degree: z.string(),
       field: z.string(),
-      startDate: z.string(),
-      endDate: z.string(),
+      startDate: z.date(),
+      endDate: z.date(),
     }),
     async resolve({ input }) {
       const education = await prisma.education.update({

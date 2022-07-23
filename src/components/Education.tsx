@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { trpc } from '../utils/trpc';
 import { useForm } from 'react-hook-form';
 import superjson from 'superjson';
@@ -10,6 +10,8 @@ import { GrEdit } from 'react-icons/gr';
 import { AiOutlineDelete } from 'react-icons/ai';
 
 export default function Education() {
+  const [editEducation, setEditEducation] = useState({});
+
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
     'education.getById',
@@ -26,14 +28,23 @@ export default function Education() {
       <EducationHeading onCreateEditEducation={onCreateEditEducation} />
 
       {createEditEducation && (
-        <CreateEditEducation onCreateEditEducation={onCreateEditEducation} />
+        <CreateEditEducation
+          onCreateEditEducation={onCreateEditEducation}
+          editEducation={editEducation}
+          setEditEducation={setEditEducation}
+        />
       )}
 
       {!createEditEducation && (
         <>
           {data.map((data, index) => (
             <div key={index}>
-              <ViewEducation education={data} />
+              <ViewEducation
+                education={data}
+                editEducation={editEducation}
+                setEditEducation={setEditEducation}
+                onCreateEditEducation={onCreateEditEducation}
+              />
             </div>
           ))}
         </>
@@ -59,7 +70,12 @@ function EducationHeading({ onCreateEditEducation }: any) {
   );
 }
 
-function ViewEducation({ education }: any) {
+function ViewEducation({
+  education,
+  editEducation,
+  setEditEducation,
+  onCreateEditEducation,
+}: any) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const client = trpc.useContext();
   const { mutate: deleteEducation, isLoading } = trpc.useMutation(
@@ -116,7 +132,14 @@ function ViewEducation({ education }: any) {
             onClick={() => setShowDeleteButton(false)}
           />
 
-          <div className='flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer'>
+          <div
+            className='flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer'
+            onClick={() => {
+              setEditEducation(education);
+              setShowDeleteButton(false);
+              onCreateEditEducation();
+            }}
+          >
             <p className='text-sm'> Click to Edit</p>
             <GrEdit className='text-lg  text-white' />
           </div>
@@ -137,9 +160,22 @@ function ViewEducation({ education }: any) {
   );
 }
 
-function CreateEditEducation({ onCreateEditEducation, user }: any) {
+function CreateEditEducation({
+  onCreateEditEducation,
+  editEducation,
+  setEditEducation,
+}: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
+
+  useEffect(() => {
+    if (editEducation.startDate) {
+      setStartDate(new Date(editEducation.startDate));
+    }
+    if (editEducation.endDate) {
+      setEndDate(new Date(editEducation.endDate));
+    }
+  }, [editEducation]);
 
   const client = trpc.useContext();
   const { mutate: addEducation, isLoading } = trpc.useMutation(
@@ -155,9 +191,9 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
     }
   );
 
-  const { mutate: editUser } = trpc.useMutation(['user.edit'], {
+  const { mutate: editUser } = trpc.useMutation(['education.edit'], {
     onSuccess: () => {
-      toast.success('Edit User Successful');
+      toast.success('Edit Education Successful');
       client.invalidateQueries([
         'education.getById',
         { id: '4e06def1-53e4-436a-894d-7260814df125' },
@@ -167,10 +203,17 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
 
   const onSubmit = async (data: any) => {
     try {
-      // if (user) {
-      //   editUser({ ...data, id: user.id });
-      //   return onCreateEditEducation();
-      // }
+      if (Object.keys(editEducation).length > 0) {
+        editUser({
+          ...data,
+          id: editEducation.id,
+          startDate,
+          endDate,
+          userId: '4e06def1-53e4-436a-894d-7260814df125',
+        });
+        return onCreateEditEducation();
+      }
+
       addEducation({
         ...data,
         startDate,
@@ -197,11 +240,18 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
-          <h1 className='text-xl'>Add New Education</h1>
+          {Object.keys(editEducation).length === 0 ? (
+            <h1 className='text-xl'>Add New Education</h1>
+          ) : (
+            <h1 className='text-xl'>Edit Education</h1>
+          )}
 
           <AiFillCloseCircle
             className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
-            onClick={onCreateEditEducation}
+            onClick={() => {
+              onCreateEditEducation();
+              setEditEducation({});
+            }}
           />
         </div>
 
@@ -212,7 +262,7 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
             className='mt-1 block w-full h-8 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
             {...register('school', {
               required: true,
-              value: user?.firstName,
+              value: editEducation?.school,
             })}
           />
         </label>
@@ -222,7 +272,7 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('degree', { value: user?.lastName })}
+            {...register('degree', { value: editEducation?.degree })}
           />
         </label>
 
@@ -231,7 +281,7 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('field', { value: user?.phone })}
+            {...register('field', { value: editEducation?.field })}
           />
         </label>
 
