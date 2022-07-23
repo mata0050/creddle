@@ -16,7 +16,12 @@ export default function Education() {
   return (
     <div className='mt-6'>
       <EducationHeading onShowCreateUser={onShowCreateUser} />
-      <ViewEducation education={data[0]} />
+
+      {data.map((data, index) => (
+        <div key={index}>
+          <ViewEducation education={data} />
+        </div>
+      ))}
     </div>
   );
 }
@@ -39,7 +44,9 @@ function EducationHeading({ onShowCreateUser }: any) {
         />
       </div>
 
-      <button className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'>Add New Education</button>
+      <button className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'>
+        Add New Education
+      </button>
     </div>
   );
 }
