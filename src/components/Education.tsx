@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { trpc } from '../utils/trpc';
-import { GrEdit } from 'react-icons/gr';
-import { AiFillCloseCircle } from 'react-icons/ai';
 import { useForm } from 'react-hook-form';
 import superjson from 'superjson';
 import moment from 'moment';
 import toast from 'react-hot-toast';
 import { DatePicker } from '@mantine/dates';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { GrEdit } from 'react-icons/gr';
+import { AiOutlineDelete } from 'react-icons/ai';
 
 export default function Education() {
   const utils = trpc.useContext();
@@ -58,58 +59,124 @@ function EducationHeading({ onCreateEditEducation }: any) {
   );
 }
 
-function ViewEducation({ education, onCreateEditEducation }: any) {
+function ViewEducation({ education }: any) {
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const client = trpc.useContext();
+  const { mutate: deleteEducation, isLoading } = trpc.useMutation(
+    ['education.delete'],
+    {
+      onSuccess: () => {
+        toast.success('Delete Successful');
+        client.invalidateQueries([
+          'education.getById',
+          { id: '4e06def1-53e4-436a-894d-7260814df125' },
+        ]);
+      },
+    }
+  );
+
+  const onDeleteEducation = () => {
+    try {
+      deleteEducation({
+        id: education.id,
+      });
+    } catch (error) {
+      toast.error('Please try again');
+    }
+  };
+
   return (
-    <div>
-      <p className='opacity-70 text-2xl mb-1'>{education?.school}</p>
-      <div className='flex mb-2'>
-        <p className='opacity-70'>
-          {moment(education?.startDate).format('MMMM YYYY')}
-        </p>
-        <span className='mx-2'>to</span>
-        <p className='opacity-70'>
-          {moment(education?.endDate).format('MMMM YYYY')}
-        </p>
-      </div>
-      <p className='opacity-70'>{education?.degree}</p>
-      <p className='opacity-70'>{education?.field}</p>
-    </div>
+    <>
+      {!showDeleteButton && (
+        <div
+          className='mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer'
+          onClick={() => setShowDeleteButton(true)}
+        >
+          <>
+            <p className='opacity-70 text-2xl'>{education?.school}</p>
+            <div className='flex mb-2 text-sm'>
+              <p className='opacity-70'>
+                {moment(education?.startDate).format('MMMM YYYY')}
+              </p>
+              <span className='mx-2'>to</span>
+              <p className='opacity-70'>
+                {moment(education?.endDate).format('MMMM YYYY')}
+              </p>
+            </div>
+            <p className='opacity-70'>{education?.degree}</p>
+            <p className='opacity-70'>{education?.field}</p>
+          </>
+        </div>
+      )}
+
+      {showDeleteButton && (
+        <div className='border border-black rounded h-36 flex justify-center items-center gap-4 relative'>
+          <AiFillCloseCircle
+            className='text-3xl hover:opacity-50 cursor-pointer text-red-600 absolute right-6 top-6'
+            onClick={() => setShowDeleteButton(false)}
+          />
+
+          <div className='flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer'>
+            <p className='text-sm'> Click to Edit</p>
+            <GrEdit className='text-lg  text-white' />
+          </div>
+
+          <div
+            className='flex gap-2 p-2 bg-gray-300 text-red-600 w-[135px] rounded hover:opacity-60 cursor-pointer'
+            onClick={() => {
+              onDeleteEducation();
+              setShowDeleteButton(false);
+            }}
+          >
+            <p className='text-sm'>Click to Delete</p>
+            <AiOutlineDelete className='text-lg text-red-600  ' />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
-
 
 function CreateEditEducation({ onCreateEditEducation, user }: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   const client = trpc.useContext();
-  const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
-    onSuccess: () => {
-      toast.success('Registration Successful');
-      client.invalidateQueries('user.getAllUsers');
-    },
-  });
+  const { mutate: addEducation, isLoading } = trpc.useMutation(
+    ['education.add'],
+    {
+      onSuccess: () => {
+        toast.success('Adding Education Successful');
+        client.invalidateQueries([
+          'education.getById',
+          { id: '4e06def1-53e4-436a-894d-7260814df125' },
+        ]);
+      },
+    }
+  );
 
   const { mutate: editUser } = trpc.useMutation(['user.edit'], {
     onSuccess: () => {
       toast.success('Edit User Successful');
-      client.invalidateQueries('user.getAllUsers');
+      client.invalidateQueries([
+        'education.getById',
+        { id: '4e06def1-53e4-436a-894d-7260814df125' },
+      ]);
     },
   });
 
   const onSubmit = async (data: any) => {
-    if (data.email.split('@')[1] !== 'gmail.com') {
-      toast.error(
-        'Please make sure Student Email Address is a Gmail email address'
-      );
-    }
-
     try {
-      if (user) {
-        editUser({ ...data, id: user.id });
-        return onCreateEditEducation();
-      }
-      newUser(data);
+      // if (user) {
+      //   editUser({ ...data, id: user.id });
+      //   return onCreateEditEducation();
+      // }
+      addEducation({
+        ...data,
+        startDate,
+        endDate,
+        userId: '4e06def1-53e4-436a-894d-7260814df125',
+      });
       onCreateEditEducation();
     } catch (error) {
       toast.error('Please Filling out the application again');
@@ -155,7 +222,7 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('degree', { required: true, value: user?.lastName })}
+            {...register('degree', { value: user?.lastName })}
           />
         </label>
 
@@ -164,7 +231,7 @@ function CreateEditEducation({ onCreateEditEducation, user }: any) {
           <input
             type='text'
             className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('field', { required: true, value: user?.phone })}
+            {...register('field', { value: user?.phone })}
           />
         </label>
 

@@ -1,5 +1,6 @@
 import { prisma } from '../../db/prisma';
 import { Prisma } from '@prisma/client';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { createRouter } from '../createRouter';
 
@@ -10,6 +11,7 @@ const defaultEducationSelect = Prisma.validator<Prisma.EducationSelect>()({
   field: true,
   startDate: true,
   endDate: true,
+  userId: true,
 });
 
 export const educationRouter = createRouter()
@@ -25,13 +27,26 @@ export const educationRouter = createRouter()
     input: z.object({
       id: z.string(),
     }),
-    async resolve({input}) {
+    async resolve({ input }) {
+      const { id } = input;
       const education = await prisma.education.findMany({
+        orderBy: [
+          {
+            startDate: 'desc',
+          },
+        ],
         where: {
-          userId: input.id,
+          userId: id,
         },
         select: defaultEducationSelect,
       });
+
+      if (!education) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No post with id '${id}'`,
+        });
+      }
       return education;
     },
   })
@@ -40,8 +55,9 @@ export const educationRouter = createRouter()
       school: z.string(),
       degree: z.string(),
       field: z.string(),
-      startDate: z.string(),
-      endDate: z.string(),
+      startDate: z.date(),
+      endDate: z.date(),
+      userId: z.string(),
     }),
     async resolve({ input }) {
       const education = await prisma.education.create({

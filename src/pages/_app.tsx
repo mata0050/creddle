@@ -9,6 +9,7 @@ import superjson from 'superjson';
 import { DefaultLayout } from '../components/DefaultLayout';
 import type { AppRouter } from '~/server/routers/_app';
 import '../../styles/tailwind.css';
+import '../../styles/delete-button-stylesheet.css'
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

@@ -1,0 +1,13 @@
+.deleteButton {
+  position: absolute;
+  color: red;
+  font-size: 2rem;
+  left: -999px;
+}
+
+.deleteButton:hover,
+.deleteButton:focus {
+  right: 150px;
+  left: 0px;
+  position: absolute;
+}
