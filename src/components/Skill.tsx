@@ -9,20 +9,20 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrEdit } from 'react-icons/gr';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-interface Skill {
+type Skill = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   userId: string | null;
   name: string;
   skill: string;
-}
+};
 
-interface Skills {
+type Skills = {
   frameworks: Skill[];
   system: Skill[];
   languages: Skill[];
-}
+};
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
