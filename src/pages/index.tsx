@@ -1,5 +1,6 @@
 import BasicInformation from '~/components/BasicInformation';
 import Education from '~/components/Education';
+import Skill from  '~/components/Skill';
 
 export default function Home<NextPage>() {
   return (
@@ -7,6 +8,7 @@ export default function Home<NextPage>() {
       <div className='p-10 bg-white box-shadow'>
         <BasicInformation />
         <Education />
+        <Skill/>
       </div>
     </div>
   );

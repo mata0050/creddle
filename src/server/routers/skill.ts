@@ -54,7 +54,7 @@ export const skillRouter = createRouter()
   .mutation('add', {
     input: z.object({
       name: z.string(),
-      skill: z.enum(['FRAMEWORKS', 'SYSTEMS', 'PROJECT']),
+      skill: z.enum(['FRAMEWORKS', 'SYSTEMS', 'LANGUAGES']),
       createdAt: z.date(),
       updatedAt: z.date(),
       userId: z.string(),
