@@ -10,7 +10,8 @@
     "studio": "prisma studio",
     "db:reset": "npx prisma db push --force-reset",
     "db:push": "npx prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:connect": "pscale connect creddle"
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
