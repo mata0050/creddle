@@ -68,7 +68,7 @@ export const skillRouter = createRouter()
       skill.forEach((skill: Skill) => {
         if (skill.skill === 'FRAMEWORKS') {
           skills.frameworks.push(skill);
-        } else if (skill.skill === 'SYSTEM') {
+        } else if (skill.skill === 'SYSTEMS') {
           skills.system.push(skill);
         } else {
           skills.languages.push(skill);
@@ -82,8 +82,6 @@ export const skillRouter = createRouter()
     input: z.object({
       name: z.string(),
       skill: z.enum(['FRAMEWORKS', 'SYSTEMS', 'LANGUAGES']),
-      createdAt: z.date(),
-      updatedAt: z.date(),
       userId: z.string(),
     }),
     async resolve({ input }) {
