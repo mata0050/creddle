@@ -4,6 +4,10 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { GrEdit } from 'react-icons/gr';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import Input from './Layout/Input';
+import TextArea from './Layout/TextArea';
+import FormButton from './Layout/FormButton';
+import Form from './Layout/Form';
 
 export default function BasicInformation() {
   const utils = trpc.useContext();
@@ -16,7 +20,10 @@ export default function BasicInformation() {
   return (
     <>
       {!showCreateUser && (
-        <ViewBasicInformation user={data[0]} onShowCreateUser={onShowCreateUser} />
+        <ViewBasicInformation
+          user={data[0]}
+          onShowCreateUser={onShowCreateUser}
+        />
       )}
       {showCreateUser && (
         <CreateEditUser user={data[0]} onShowCreateUser={onShowCreateUser} />
@@ -68,108 +75,66 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
   } = useForm();
 
   return (
-    <div className='mt-6 '>
-      <form
-        className='grid grid-cols-1 gap-y-4  p-8 rounded-lg box-shadow'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
-          <h1 className='text-xl'>Basic Information</h1>
+    <div className="mt-6 ">
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-between border-b-2 border-b-black mb-4 pb-2">
+          <h1 className="text-xl">Basic Information</h1>
 
           <AiFillCloseCircle
-            className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
+            className="text-2xl hover:opacity-50 cursor-pointer text-red-600"
             onClick={onShowCreateUser}
           />
         </div>
 
-        <label className='block'>
-          <span className='text-gray-700'>First Name</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('firstName', {
-              required: true,
-              value: user?.firstName,
-            })}
-          />
-        </label>
+        <Input
+          label="First Name"
+          register={register('firstName', {
+            required: true,
+            value: user?.firstName,
+          })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Last Name</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('lastName', { required: true, value: user?.lastName })}
-          />
-        </label>
+        <Input
+          label="Last Name"
+          register={register('lastName', {
+            required: true,
+            value: user?.lastName,
+          })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Phone Number</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('phone', { required: true, value: user?.phone })}
-          />
-        </label>
+        <Input
+          label="Phone Number"
+          register={register('phone', { required: true, value: user?.phone })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Email</span>
-          <input
-            type='email'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('email', { required: true, value: user?.email })}
-          />
-        </label>
+        <Input
+          label="Email"
+          register={register('email', { required: true, value: user?.email })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Github Username</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('github', { required: true, value: user?.github })}
-          />
-        </label>
+        <Input
+          label="Github Username"
+          register={register('github', { required: true, value: user?.github })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Location</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('location', { required: true, value: user?.location })}
-          />
-        </label>
+        <Input
+          label="Location"
+          register={register('location', {
+            required: true,
+            value: user?.location,
+          })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Summary</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('summary', { required: true, value: user?.summary })}
-          />
-        </label>
+        <TextArea
+          label="Summary"
+          register={register('summary', {
+            required: true,
+            value: user?.summary,
+          })}
+        />
 
-        <button
-          disabled={isLoading}
-          type='submit'
-          className='my-4 capitalize bg-darkGrey text-white font-medium py-2 px-4 rounded-md hover:opacity-70'
-        >
-          {isLoading ? (
-            <span className='flex items-center justify-center'>
-              <svg
-                className='w-6 h-6 animate-spin mr-1'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path d='M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z' />
-              </svg>
-              Submitting...
-            </span>
-          ) : (
-            <span>Submit</span>
-          )}
-        </button>
-      </form>
+        <FormButton isLoading={isLoading} />
+      </Form>
     </div>
   );
 }
@@ -177,23 +142,23 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 function ViewBasicInformation({ user, onShowCreateUser }: any) {
   return (
     <div>
-      <div className='flex justify-between border-b-2 border-b-black mb-4'>
-        <h1 className='text-3xl'>Basic Information</h1>
+      <div className="flex justify-between border-b-2 border-b-black mb-4">
+        <h1 className="text-3xl">Basic Information</h1>
 
         <GrEdit
-          className='text-xl hover:opacity-50 cursor-pointer'
+          className="text-xl hover:opacity-50 cursor-pointer"
           onClick={onShowCreateUser}
         />
       </div>
 
-      <p className='opacity-70'>{user?.firstName}</p>
-      <p className='opacity-70'>{user?.lastName}</p>
-      <p className='opacity-70'>{user?.email}</p>
-      <p className='opacity-70'>{user?.phone}</p>
-      <p className='opacity-70'>{`github.com/${user?.github}`}</p>
-      <p className='opacity-70'>{user?.location}</p>
+      <p className="opacity-70">{user?.firstName}</p>
+      <p className="opacity-70">{user?.lastName}</p>
+      <p className="opacity-70">{user?.email}</p>
+      <p className="opacity-70">{user?.phone}</p>
+      <p className="opacity-70">{`github.com/${user?.github}`}</p>
+      <p className="opacity-70">{user?.location}</p>
 
-      <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>Summary</h2>
+      <h2 className="text-3xl my-4 border-b-2 border-b-black pb-2">Summary</h2>
       <p>{user?.summary}</p>
     </div>
   );
