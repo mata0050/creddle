@@ -1,4 +1,4 @@
-import create from 'zustand';
+import create from "zustand";
 
 type Store = {
   bears: number;
@@ -7,7 +7,6 @@ type Store = {
   project: [];
   skill: [];
   user: [];
-
 };
 const useStore = create<Store>((set) => ({
   bears: 0,

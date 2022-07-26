@@ -1,15 +1,15 @@
-import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
-import { loggerLink } from '@trpc/client/links/loggerLink';
-import { withTRPC } from '@trpc/next';
-import { NextPage } from 'next';
-import { AppProps } from 'next/app';
-import { AppType } from 'next/dist/shared/lib/utils';
-import { ReactElement, ReactNode } from 'react';
-import superjson from 'superjson';
-import { DefaultLayout } from '../components/DefaultLayout';
-import type { AppRouter } from '~/server/routers/_app';
-import '../../styles/tailwind.css';
-import '../../styles/delete-button-stylesheet.css'
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { loggerLink } from "@trpc/client/links/loggerLink";
+import { withTRPC } from "@trpc/next";
+import { NextPage } from "next";
+import { AppProps } from "next/app";
+import { AppType } from "next/dist/shared/lib/utils";
+import { ReactElement, ReactNode } from "react";
+import superjson from "superjson";
+import { DefaultLayout } from "../components/DefaultLayout";
+import type { AppRouter } from "~/server/routers/_app";
+import "../../styles/tailwind.css";
+import "../../styles/delete-button-stylesheet.css";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -27,8 +27,8 @@ const MyApp = (({ Component, pageProps }: AppPropsWithLayout) => {
 }) as AppType;
 
 function getBaseUrl() {
-  if (typeof window !== 'undefined') {
-    return '';
+  if (typeof window !== "undefined") {
+    return "";
   }
   // reference for vercel.com
   if (process.env.VERCEL_URL) {
@@ -58,8 +58,8 @@ export default withTRPC<AppRouter>({
         // adds pretty logs to your console in development and logs errors in production
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === 'development' ||
-            (opts.direction === 'down' && opts.result instanceof Error),
+            process.env.NODE_ENV === "development" ||
+            (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,

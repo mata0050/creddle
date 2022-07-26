@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 /* Hamburger menu */
 .hamburger {
   cursor: pointer;
@@ -54,7 +52,6 @@
 .box-shadow {
   box-shadow: -1px 3px 8px 5px rgba(0, 0, 0, 0.16);
 }
-
 
 /* spinner */
 .loadingSpinnerContainer {

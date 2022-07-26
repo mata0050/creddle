@@ -1,8 +1,8 @@
-import { prisma } from '../../db/prisma';
-import { Prisma } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { createRouter } from '../createRouter';
+import { prisma } from "../../db/prisma";
+import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { createRouter } from "../createRouter";
 
 // id        String   @id @default(uuid())
 // createdAt DateTime @default(now())
@@ -20,7 +20,6 @@ const defaultSkillSelect = Prisma.validator<Prisma.SkillSelect>()({
   updatedAt: true,
 });
 
-
 type Skill = {
   id: string;
   createdAt: Date;
@@ -36,9 +35,8 @@ type Skills = {
   languages: Skill[];
 };
 
-
 export const skillRouter = createRouter()
-  .query('getById', {
+  .query("getById", {
     input: z.object({
       id: z.string(),
     }),
@@ -53,22 +51,21 @@ export const skillRouter = createRouter()
 
       if (!skill) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
+          code: "NOT_FOUND",
           message: `No post with id '${id}'`,
         });
       }
 
-
-      const skills: Skills= {
+      const skills: Skills = {
         frameworks: [],
         system: [],
         languages: [],
       };
-    
+
       skill.forEach((skill: Skill) => {
-        if (skill.skill === 'FRAMEWORKS') {
+        if (skill.skill === "FRAMEWORKS") {
           skills.frameworks.push(skill);
-        } else if (skill.skill === 'SYSTEMS') {
+        } else if (skill.skill === "SYSTEMS") {
           skills.system.push(skill);
         } else {
           skills.languages.push(skill);
@@ -78,10 +75,10 @@ export const skillRouter = createRouter()
       return skills;
     },
   })
-  .mutation('add', {
+  .mutation("add", {
     input: z.object({
       name: z.string(),
-      skill: z.enum(['FRAMEWORKS', 'SYSTEMS', 'LANGUAGES']),
+      skill: z.enum(["FRAMEWORKS", "SYSTEMS", "LANGUAGES"]),
       userId: z.string(),
     }),
     async resolve({ input }) {
@@ -93,11 +90,11 @@ export const skillRouter = createRouter()
       return skill;
     },
   })
-  .mutation('edit', {
+  .mutation("edit", {
     input: z.object({
       id: z.string(),
       name: z.string(),
-      skill: z.enum(['FRAMEWORKS', 'SYSTEMS', 'PROJECT']),
+      skill: z.enum(["FRAMEWORKS", "SYSTEMS", "PROJECT"]),
       createdAt: z.date(),
       updatedAt: z.date(),
       userId: z.string(),
@@ -114,7 +111,7 @@ export const skillRouter = createRouter()
       return skill;
     },
   })
-  .mutation('delete', {
+  .mutation("delete", {
     input: z.object({
       id: z.string(),
     }),

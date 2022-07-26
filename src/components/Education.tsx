@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { trpc } from '../utils/trpc';
-import { useForm } from 'react-hook-form';
-import superjson from 'superjson';
-import moment from 'moment';
-import toast from 'react-hot-toast';
-import { DatePicker } from '@mantine/dates';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import EditDeleteButtons from './Layout/EditDeleteButtons';
-import Input from './Layout/Input';
-import Form from './Layout/Form';
-import FormButton from './Layout/FormButton';
+import React, { useEffect, useState } from "react";
+import { trpc } from "../utils/trpc";
+import { useForm } from "react-hook-form";
+import superjson from "superjson";
+import moment from "moment";
+import toast from "react-hot-toast";
+import { DatePicker } from "@mantine/dates";
+import { AiFillCloseCircle } from "react-icons/ai";
+import EditDeleteButtons from "./Layout/EditDeleteButtons";
+import Input from "./Layout/Input";
+import Form from "./Layout/Form";
+import FormButton from "./Layout/FormButton";
 
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
-    'education.getById',
-    { id: '4e06def1-53e4-436a-894d-7260814df125' },
+    "education.getById",
+    { id: "4e06def1-53e4-436a-894d-7260814df125" },
   ]);
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
@@ -64,7 +64,8 @@ function EducationHeading({ onCreateEditEducation }: any) {
 
       <button
         className="p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4"
-        onClick={onCreateEditEducation}>
+        onClick={onCreateEditEducation}
+      >
         Add New Education
       </button>
     </div>
@@ -86,16 +87,17 @@ function ViewEducation({
       {!showDeleteButton && (
         <div
           className="mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer"
-          onClick={() => setShowDeleteButton(true)}>
+          onClick={() => setShowDeleteButton(true)}
+        >
           <>
             <p className="opacity-70 text-2xl">{education?.school}</p>
             <div className="flex mb-2 text-sm">
               <p className="opacity-70">
-                {moment(education?.startDate).format('MMMM YYYY')}
+                {moment(education?.startDate).format("MMMM YYYY")}
               </p>
               <span className="mx-2">to</span>
               <p className="opacity-70">
-                {moment(education?.endDate).format('MMMM YYYY')}
+                {moment(education?.endDate).format("MMMM YYYY")}
               </p>
             </div>
             <p className="opacity-70">{education?.degree}</p>
@@ -123,14 +125,16 @@ function DeleteEducation({
   onCreateEditEducation,
 }: any) {
   const client = trpc.useContext();
+  const deleteEducationString = "education.delete";
+  const queryString = "";
   const { mutate: deleteEducation, isLoading } = trpc.useMutation(
-    ['education.delete'],
+    [deleteEducationString],
     {
       onSuccess: () => {
-        toast.success('Delete Successful');
+        toast.success("Delete Successful");
         client.invalidateQueries([
-          'education.getById',
-          { id: '4e06def1-53e4-436a-894d-7260814df125' },
+          "education.getById",
+          { id: "4e06def1-53e4-436a-894d-7260814df125" },
         ]);
       },
     }
@@ -142,7 +146,7 @@ function DeleteEducation({
         id: education.id,
       });
     } catch (error) {
-      toast.error('Please try again');
+      toast.error("Please try again");
     }
   };
 
@@ -187,24 +191,24 @@ function CreateEditEducation({
 
   const client = trpc.useContext();
   const { mutate: addEducation, isLoading } = trpc.useMutation(
-    ['education.add'],
+    ["education.add"],
     {
       onSuccess: () => {
-        toast.success('Adding Education Successful');
+        toast.success("Adding Education Successful");
         client.invalidateQueries([
-          'education.getById',
-          { id: '4e06def1-53e4-436a-894d-7260814df125' },
+          "education.getById",
+          { id: "4e06def1-53e4-436a-894d-7260814df125" },
         ]);
       },
     }
   );
 
-  const { mutate: editUser } = trpc.useMutation(['education.edit'], {
+  const { mutate: editUser } = trpc.useMutation(["education.edit"], {
     onSuccess: () => {
-      toast.success('Edit Education Successful');
+      toast.success("Edit Education Successful");
       client.invalidateQueries([
-        'education.getById',
-        { id: '4e06def1-53e4-436a-894d-7260814df125' },
+        "education.getById",
+        { id: "4e06def1-53e4-436a-894d-7260814df125" },
       ]);
     },
   });
@@ -217,7 +221,7 @@ function CreateEditEducation({
           id: editEducation.id,
           startDate,
           endDate,
-          userId: '4e06def1-53e4-436a-894d-7260814df125',
+          userId: "4e06def1-53e4-436a-894d-7260814df125",
         });
         return onCreateEditEducation();
       }
@@ -226,11 +230,11 @@ function CreateEditEducation({
         ...data,
         startDate,
         endDate,
-        userId: '4e06def1-53e4-436a-894d-7260814df125',
+        userId: "4e06def1-53e4-436a-894d-7260814df125",
       });
       onCreateEditEducation();
     } catch (error) {
-      toast.error('Please Filling out the application again');
+      toast.error("Please Filling out the application again");
     }
   };
 
@@ -262,7 +266,7 @@ function CreateEditEducation({
 
         <Input
           label="School"
-          register={register('school', {
+          register={register("school", {
             required: true,
             value: editEducation?.school,
           })}
@@ -270,12 +274,12 @@ function CreateEditEducation({
 
         <Input
           label="degree"
-          register={register('degree', { value: editEducation?.degree })}
+          register={register("degree", { value: editEducation?.degree })}
         />
 
         <Input
           label="Field"
-          register={register('field', { value: editEducation?.field })}
+          register={register("field", { value: editEducation?.field })}
         />
 
         <DatePicker

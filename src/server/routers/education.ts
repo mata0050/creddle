@@ -1,8 +1,8 @@
-import { prisma } from '../../db/prisma';
-import { Prisma } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { createRouter } from '../createRouter';
+import { prisma } from "../../db/prisma";
+import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { createRouter } from "../createRouter";
 
 const defaultEducationSelect = Prisma.validator<Prisma.EducationSelect>()({
   id: true,
@@ -15,7 +15,7 @@ const defaultEducationSelect = Prisma.validator<Prisma.EducationSelect>()({
 });
 
 export const educationRouter = createRouter()
-  .query('getAll', {
+  .query("getAll", {
     async resolve() {
       const education = await prisma.education.findMany({
         select: defaultEducationSelect,
@@ -23,7 +23,7 @@ export const educationRouter = createRouter()
       return education;
     },
   })
-  .query('getById', {
+  .query("getById", {
     input: z.object({
       id: z.string(),
     }),
@@ -32,7 +32,7 @@ export const educationRouter = createRouter()
       const education = await prisma.education.findMany({
         orderBy: [
           {
-            startDate: 'desc',
+            startDate: "desc",
           },
         ],
         where: {
@@ -43,14 +43,14 @@ export const educationRouter = createRouter()
 
       if (!education) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
+          code: "NOT_FOUND",
           message: `No post with id '${id}'`,
         });
       }
       return education;
     },
   })
-  .mutation('add', {
+  .mutation("add", {
     input: z.object({
       school: z.string(),
       degree: z.string(),
@@ -68,7 +68,7 @@ export const educationRouter = createRouter()
       return education;
     },
   })
-  .mutation('edit', {
+  .mutation("edit", {
     input: z.object({
       id: z.string(),
       school: z.string(),
@@ -89,7 +89,7 @@ export const educationRouter = createRouter()
       return education;
     },
   })
-  .mutation('delete', {
+  .mutation("delete", {
     input: z.object({
       id: z.string(),
     }),

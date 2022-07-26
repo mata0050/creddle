@@ -1,7 +1,7 @@
-import { prisma } from '../../db/prisma';
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
-import { createRouter } from '../createRouter';
+import { prisma } from "../../db/prisma";
+import { Prisma } from "@prisma/client";
+import { z } from "zod";
+import { createRouter } from "../createRouter";
 
 const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
@@ -14,9 +14,8 @@ const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   summary: true,
 });
 
-
 export const userRouter = createRouter()
-  .query('getAllUsers', {
+  .query("getAllUsers", {
     async resolve() {
       const users = await prisma.user.findMany({
         select: defaultUserSelect,
@@ -24,7 +23,7 @@ export const userRouter = createRouter()
       return users;
     },
   })
-  .mutation('add', {
+  .mutation("add", {
     input: z.object({
       email: z.string(),
       firstName: z.string(),
@@ -43,7 +42,7 @@ export const userRouter = createRouter()
       return user;
     },
   })
-  .mutation('edit', {
+  .mutation("edit", {
     input: z.object({
       id: z.string(),
       email: z.string(),

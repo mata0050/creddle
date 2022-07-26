@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { trpc } from '../utils/trpc';
-import { useForm } from 'react-hook-form';
-import superjson from 'superjson';
-import moment from 'moment';
-import toast from 'react-hot-toast';
-import { DatePicker } from '@mantine/dates';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrEdit } from 'react-icons/gr';
-import { AiOutlineDelete } from 'react-icons/ai';
-import Input from './Layout/Input';
-import Form from './Layout/Form';
-import FormButton from './Layout/FormButton';
+import React, { useEffect, useState } from "react";
+import { trpc } from "../utils/trpc";
+import { useForm } from "react-hook-form";
+import superjson from "superjson";
+import moment from "moment";
+import toast from "react-hot-toast";
+import { DatePicker } from "@mantine/dates";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { GrEdit } from "react-icons/gr";
+import { AiOutlineDelete } from "react-icons/ai";
+import Input from "./Layout/Input";
+import Form from "./Layout/Form";
+import FormButton from "./Layout/FormButton";
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
-    'skill.getById',
-    { id: '4e06def1-53e4-436a-894d-7260814df125' },
+    "skill.getById",
+    { id: "4e06def1-53e4-436a-894d-7260814df125" },
   ]);
   const [addSkill, setAddSkill] = useState(false);
   const onShowSkill = () => setAddSkill((prevState) => !prevState);
@@ -48,51 +48,38 @@ function SkillHeading() {
 }
 
 function ViewSkills({ skills, onShowSkill }: any) {
-  return (
+  const Skills = ({ title, skills, section }: any) => (
     <>
-      <button
-        className="p-2 bg-gray-500 text-sm text-white rounded hover:opacity-60 mb-4"
-        onClick={onShowSkill}>
-        Add Skill
-      </button>
-      <h1 className="text-xl uppercase mb-2">Frameworks</h1>
+      <h1 className="text-xl uppercase my-4">{title}</h1>
 
       <div className="flex gap-3">
         {skills.frameworks !== 0 &&
-          skills.frameworks.map((skill: any) => (
+          skills[section].map((skill: any) => (
             <p
               key={skill.id}
-              className="opacity-70 border border-black px-3 rounded inline-block">
+              className="opacity-70 border border-black px-3 rounded inline-block"
+            >
               {skill.name}
             </p>
           ))}
       </div>
+    </>
+  );
 
-      <h1 className="text-xl uppercase mt-6 mb-2">Systems</h1>
+  return (
+    <>
+      <button
+        className="p-2 bg-gray-500 text-sm text-white rounded hover:opacity-60 mb-2"
+        onClick={onShowSkill}
+      >
+        Add Skill
+      </button>
 
-      <div className="flex gap-3">
-        {skills.system !== 0 &&
-          skills.system.map((skill: any) => (
-            <p
-              key={skill.id}
-              className="opacity-70 border border-black px-3 rounded inline-block">
-              {skill.name}
-            </p>
-          ))}
-      </div>
+      <Skills title="Frameworks" skills={skills} section="frameworks" />
 
-      <h1 className="text-xl uppercase mt-6 mb-2">Languages</h1>
+      <Skills title="Systems" skills={skills} section="system" />
 
-      <div className="flex gap-3">
-        {skills.languages !== 0 &&
-          skills.languages.map((skill: any) => (
-            <p
-              key={skill.id}
-              className="opacity-70 border border-black px-3 rounded inline-block">
-              {skill.name}
-            </p>
-          ))}
-      </div>
+      <Skills title="Languages" skills={skills} section="languages" />
     </>
   );
 }
@@ -106,12 +93,12 @@ function AddSkill({ onShowSkill }: any) {
     reset,
   } = useForm();
 
-  const { mutate: addSkill, isLoading } = trpc.useMutation(['skill.add'], {
+  const { mutate: addSkill, isLoading } = trpc.useMutation(["skill.add"], {
     onSuccess: () => {
-      toast.success('Add Skill Successful');
+      toast.success("Add Skill Successful");
       client.invalidateQueries([
-        'skill.getById',
-        { id: '4e06def1-53e4-436a-894d-7260814df125' },
+        "skill.getById",
+        { id: "4e06def1-53e4-436a-894d-7260814df125" },
       ]);
     },
   });
@@ -120,14 +107,13 @@ function AddSkill({ onShowSkill }: any) {
     try {
       addSkill({
         ...data,
-        userId: '4e06def1-53e4-436a-894d-7260814df125',
+        userId: "4e06def1-53e4-436a-894d-7260814df125",
       });
       onShowSkill();
     } catch (error) {
-      toast.error('Please try again');
+      toast.error("Please try again");
     }
   };
-
 
   return (
     <Form handleSubmit={handleSubmit(onSubmit)}>
@@ -147,18 +133,19 @@ function AddSkill({ onShowSkill }: any) {
       </div>
 
       <Input
-        label={'Name'}
-        register={register('name', {
+        label={"Name"}
+        register={register("name", {
           required: true,
-          value: '',
+          value: "",
         })}
       />
 
       <label className="block">
         <span className="text-gray-700">Skill Section</span>
         <select
-          {...register('skill', { value: '' })}
-          className="mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+          {...register("skill", { value: "" })}
+          className="mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        >
           <option value="FRAMEWORKS">Framework</option>
           <option value="SYSTEMS">Systems</option>
           <option value="LANGUAGES">Languages</option>
