@@ -26,7 +26,7 @@ export default function Education() {
   if (isLoading || !data) return <div>Loading...</div>;
 
   return (
-    <div className="mt-6">
+    <div className='mt-6'>
       <EducationHeading onCreateEditEducation={onCreateEditEducation} />
 
       {createEditEducation && (
@@ -58,14 +58,13 @@ export default function Education() {
 function EducationHeading({ onCreateEditEducation }: any) {
   return (
     <div>
-      <div className="flex justify-between border-b-2 border-b-black mb-4">
-        <h1 className="text-3xl">Education</h1>
+      <div className='flex justify-between border-b-2 border-b-black mb-4'>
+        <h1 className='text-3xl'>Education</h1>
       </div>
 
       <button
-        className="p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4"
-        onClick={onCreateEditEducation}
-      >
+        className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'
+        onClick={onCreateEditEducation}>
         Add New Education
       </button>
     </div>
@@ -86,22 +85,21 @@ function ViewEducation({
     <>
       {!showDeleteButton && (
         <div
-          className="mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer"
-          onClick={() => setShowDeleteButton(true)}
-        >
+          className='mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer'
+          onClick={() => setShowDeleteButton(true)}>
           <>
-            <p className="opacity-70 text-2xl">{education?.school}</p>
-            <div className="flex mb-2 text-sm">
-              <p className="opacity-70">
+            <p className='opacity-70 text-2xl'>{education?.school}</p>
+            <div className='flex mb-2 text-sm'>
+              <p className='opacity-70'>
                 {moment(education?.startDate).format("MMMM YYYY")}
               </p>
-              <span className="mx-2">to</span>
-              <p className="opacity-70">
+              <span className='mx-2'>to</span>
+              <p className='opacity-70'>
                 {moment(education?.endDate).format("MMMM YYYY")}
               </p>
             </div>
-            <p className="opacity-70">{education?.degree}</p>
-            <p className="opacity-70">{education?.field}</p>
+            <p className='opacity-70'>{education?.degree}</p>
+            <p className='opacity-70'>{education?.field}</p>
           </>
         </div>
       )}
@@ -124,51 +122,21 @@ function DeleteEducation({
   setShowDeleteButton,
   onCreateEditEducation,
 }: any) {
-  const client = trpc.useContext();
-  const deleteEducationString = "education.delete";
-  const queryString = "";
-  const { mutate: deleteEducation, isLoading } = trpc.useMutation(
-    [deleteEducationString],
-    {
-      onSuccess: () => {
-        toast.success("Delete Successful");
-        client.invalidateQueries([
-          "education.getById",
-          { id: "4e06def1-53e4-436a-894d-7260814df125" },
-        ]);
-      },
-    }
-  );
-
-  const onDeleteEducation = () => {
-    try {
-      deleteEducation({
-        id: education.id,
-      });
-    } catch (error) {
-      toast.error("Please try again");
-    }
-  };
-
   const onEdit = () => {
     setEditEducation(education);
     setShowDeleteButton(false);
     onCreateEditEducation();
   };
 
-  const onDelete = () => {
-    onDeleteEducation();
-    setShowDeleteButton(false);
-  };
-
   return (
-    <>
-      <EditDeleteButtons
-        onClose={() => setShowDeleteButton(false)}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
-    </>
+    <EditDeleteButtons
+      onClose={() => setShowDeleteButton(false)}
+      onEdit={onEdit}
+      trpcString='education.delete'
+      invalidateQueries='education.getById'
+      queryID='4e06def1-53e4-436a-894d-7260814df125'
+      deleteItem={education}
+    />
   );
 }
 
@@ -246,17 +214,17 @@ function CreateEditEducation({
   } = useForm();
 
   return (
-    <div className="mt-6 ">
+    <div className='mt-6 '>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-between border-b-2 border-b-black mb-4 pb-2">
+        <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
           {Object.keys(editEducation).length === 0 ? (
-            <h1 className="text-xl">Add New Education</h1>
+            <h1 className='text-xl'>Add New Education</h1>
           ) : (
-            <h1 className="text-xl">Edit Education</h1>
+            <h1 className='text-xl'>Edit Education</h1>
           )}
 
           <AiFillCloseCircle
-            className="text-2xl hover:opacity-50 cursor-pointer text-red-600"
+            className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
             onClick={() => {
               onCreateEditEducation();
               setEditEducation({});
@@ -265,7 +233,7 @@ function CreateEditEducation({
         </div>
 
         <Input
-          label="School"
+          label='School'
           register={register("school", {
             required: true,
             value: editEducation?.school,
@@ -273,26 +241,26 @@ function CreateEditEducation({
         />
 
         <Input
-          label="degree"
+          label='degree'
           register={register("degree", { value: editEducation?.degree })}
         />
 
         <Input
-          label="Field"
+          label='Field'
           register={register("field", { value: editEducation?.field })}
         />
 
         <DatePicker
-          placeholder="Pick date"
-          label="Start date"
+          placeholder='Pick date'
+          label='Start date'
           value={startDate}
           onChange={(date) => setStartDate(date)}
           required
         />
 
         <DatePicker
-          placeholder="Pick date"
-          label="End date"
+          placeholder='Pick date'
+          label='End date'
           value={endDate}
           onChange={(date) => setEndDate(date)}
           required

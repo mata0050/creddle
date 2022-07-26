@@ -8,25 +8,27 @@ import Input from "./Layout/Input";
 import TextArea from "./Layout/TextArea";
 import FormButton from "./Layout/FormButton";
 import Form from "./Layout/Form";
+import { useAllUserContext } from '~/context/UserContext';
 
 export default function BasicInformation() {
-  const utils = trpc.useContext();
-  const { data, isLoading } = trpc.useQuery(["user.getAllUsers"]);
+const {allUsers }  = useAllUserContext();
+
   const [showCreateUser, setShowCreateUser] = useState(false);
   const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
 
-  if (isLoading || !data) return <div>Loading...</div>;
+
+  if (!allUsers) return <div>Loading...</div>;
 
   return (
     <>
       {!showCreateUser && (
         <ViewBasicInformation
-          user={data[0]}
+          user={allUsers[0]}
           onShowCreateUser={onShowCreateUser}
         />
       )}
       {showCreateUser && (
-        <CreateEditUser user={data[0]} onShowCreateUser={onShowCreateUser} />
+        <CreateEditUser user={allUsers[0]} onShowCreateUser={onShowCreateUser} />
       )}
     </>
   );
@@ -75,19 +77,19 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
   } = useForm();
 
   return (
-    <div className="mt-6 ">
+    <div className='mt-6 '>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-between border-b-2 border-b-black mb-4 pb-2">
-          <h1 className="text-xl">Basic Information</h1>
+        <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
+          <h1 className='text-xl'>Basic Information</h1>
 
           <AiFillCloseCircle
-            className="text-2xl hover:opacity-50 cursor-pointer text-red-600"
+            className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
             onClick={onShowCreateUser}
           />
         </div>
 
         <Input
-          label="First Name"
+          label='First Name'
           register={register("firstName", {
             required: true,
             value: user?.firstName,
@@ -95,7 +97,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
         />
 
         <Input
-          label="Last Name"
+          label='Last Name'
           register={register("lastName", {
             required: true,
             value: user?.lastName,
@@ -103,22 +105,22 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
         />
 
         <Input
-          label="Phone Number"
+          label='Phone Number'
           register={register("phone", { required: true, value: user?.phone })}
         />
 
         <Input
-          label="Email"
+          label='Email'
           register={register("email", { required: true, value: user?.email })}
         />
 
         <Input
-          label="Github Username"
+          label='Github Username'
           register={register("github", { required: true, value: user?.github })}
         />
 
         <Input
-          label="Location"
+          label='Location'
           register={register("location", {
             required: true,
             value: user?.location,
@@ -126,7 +128,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
         />
 
         <TextArea
-          label="Summary"
+          label='Summary'
           register={register("summary", {
             required: true,
             value: user?.summary,
@@ -142,23 +144,23 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 function ViewBasicInformation({ user, onShowCreateUser }: any) {
   return (
     <div>
-      <div className="flex justify-between border-b-2 border-b-black mb-4">
-        <h1 className="text-3xl">Basic Information</h1>
+      <div className='flex justify-between border-b-2 border-b-black mb-4'>
+        <h1 className='text-3xl'>Basic Information</h1>
 
         <GrEdit
-          className="text-xl hover:opacity-50 cursor-pointer"
+          className='text-xl hover:opacity-50 cursor-pointer'
           onClick={onShowCreateUser}
         />
       </div>
 
-      <p className="opacity-70">{user?.firstName}</p>
-      <p className="opacity-70">{user?.lastName}</p>
-      <p className="opacity-70">{user?.email}</p>
-      <p className="opacity-70">{user?.phone}</p>
-      <p className="opacity-70">{`github.com/${user?.github}`}</p>
-      <p className="opacity-70">{user?.location}</p>
+      <p className='opacity-70'>{user?.firstName}</p>
+      <p className='opacity-70'>{user?.lastName}</p>
+      <p className='opacity-70'>{user?.email}</p>
+      <p className='opacity-70'>{user?.phone}</p>
+      <p className='opacity-70'>{`github.com/${user?.github}`}</p>
+      <p className='opacity-70'>{user?.location}</p>
 
-      <h2 className="text-3xl my-4 border-b-2 border-b-black pb-2">Summary</h2>
+      <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>Summary</h2>
       <p>{user?.summary}</p>
     </div>
   );

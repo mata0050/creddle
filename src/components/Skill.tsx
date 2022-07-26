@@ -11,6 +11,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
+import EditDeleteButtons from "./Layout/EditDeleteButtons";
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
@@ -21,15 +22,18 @@ export default function Skill() {
     { id: "4e06def1-53e4-436a-894d-7260814df125" },
   ]);
   const [addSkill, setAddSkill] = useState(false);
+
   const onShowSkill = () => setAddSkill((prevState) => !prevState);
+
   const [createEditEducation, setCreateEditEducation] = useState(false);
+
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
   if (isLoading || !data) return <div>Loading...</div>;
 
   return (
-    <div className="mt-6">
+    <div className='mt-6'>
       <SkillHeading />
       {addSkill && <AddSkill onShowSkill={onShowSkill} />}
       <ViewSkills skills={data} onShowSkill={onShowSkill} />
@@ -40,25 +44,51 @@ export default function Skill() {
 function SkillHeading() {
   return (
     <div>
-      <div className="flex justify-between border-b-2 border-b-black mb-4">
-        <h1 className="text-3xl">Skills</h1>
+      <div className='flex justify-between border-b-2 border-b-black mb-4'>
+        <h1 className='text-3xl'>Skills</h1>
       </div>
     </div>
   );
 }
 
 function ViewSkills({ skills, onShowSkill }: any) {
+  const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);
+
+  const onShowEditDeleteButton = () =>
+    setShowEditDeleteButton((prevState) => !prevState);
+  const [selectedItem, setSelectedItem] = useState({
+    id: "",
+    name: "",
+    skill: "",
+  });
+
+  const selectItem = ({ id, name, skill }: any) => {
+    setSelectedItem({ id: id, name, skill });
+    onShowEditDeleteButton();
+  };
+
+  const onEdit = () => {
+    onShowEditDeleteButton();
+    onShowSkill();
+  };
+
   const Skills = ({ title, skills, section }: any) => (
     <>
-      <h1 className="text-xl uppercase my-4">{title}</h1>
+      <h1 className='text-xl uppercase my-4'>{title}</h1>
 
-      <div className="flex gap-3">
+      <div className='flex gap-3'>
         {skills.frameworks !== 0 &&
           skills[section].map((skill: any) => (
             <p
               key={skill.id}
-              className="opacity-70 border border-black px-3 rounded inline-block"
-            >
+              onClick={() =>
+                selectItem({
+                  id: skill.id,
+                  name: skill.name,
+                  skill: skill.skill,
+                })
+              }
+              className='opacity-70 border border-black px-3 rounded inline-block'>
               {skill.name}
             </p>
           ))}
@@ -68,18 +98,32 @@ function ViewSkills({ skills, onShowSkill }: any) {
 
   return (
     <>
-      <button
-        className="p-2 bg-gray-500 text-sm text-white rounded hover:opacity-60 mb-2"
-        onClick={onShowSkill}
-      >
-        Add Skill
-      </button>
+      {!showEditDeleteButton && (
+        <>
+          <button
+            className='p-2 bg-gray-500 text-sm text-white rounded hover:opacity-60 mb-2'
+            onClick={onShowSkill}>
+            Add Skill
+          </button>
 
-      <Skills title="Frameworks" skills={skills} section="frameworks" />
+          <Skills title='Frameworks' skills={skills} section='frameworks' />
 
-      <Skills title="Systems" skills={skills} section="system" />
+          <Skills title='Systems' skills={skills} section='system' />
 
-      <Skills title="Languages" skills={skills} section="languages" />
+          <Skills title='Languages' skills={skills} section='languages' />
+        </>
+      )}
+
+      {showEditDeleteButton && (
+        <EditDeleteButtons
+          onClose={onShowEditDeleteButton}
+          onEdit={""}
+          trpcString='skill.delete'
+          invalidateQueries='skill.getById'
+          queryID='4e06def1-53e4-436a-894d-7260814df125'
+          deleteItem={selectedItem}
+        />
+      )}
     </>
   );
 }
@@ -104,6 +148,7 @@ function AddSkill({ onShowSkill }: any) {
   });
 
   const onSubmit = async (data: any) => {
+    console.log("submit");
     try {
       addSkill({
         ...data,
@@ -116,16 +161,16 @@ function AddSkill({ onShowSkill }: any) {
   };
 
   return (
-    <Form handleSubmit={handleSubmit(onSubmit)}>
-      <div className="flex justify-between border-b-2 border-b-black mb-4 pb-2">
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
         {/* {Object.keys(editEducation).length === 0 ? (
           <h1 className='text-xl'>Add New Education</h1>
         ) : (
         )} */}
-        <h1 className="text-xl">Add Skill</h1>
+        <h1 className='text-xl'>Add Skill</h1>
 
         <AiFillCloseCircle
-          className="text-2xl hover:opacity-50 cursor-pointer text-red-600"
+          className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
           onClick={() => {
             onShowSkill();
           }}
@@ -140,15 +185,14 @@ function AddSkill({ onShowSkill }: any) {
         })}
       />
 
-      <label className="block">
-        <span className="text-gray-700">Skill Section</span>
+      <label className='block'>
+        <span className='text-gray-700'>Skill Section</span>
         <select
           {...register("skill", { value: "" })}
-          className="mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-        >
-          <option value="FRAMEWORKS">Framework</option>
-          <option value="SYSTEMS">Systems</option>
-          <option value="LANGUAGES">Languages</option>
+          className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+          <option value='FRAMEWORKS'>Framework</option>
+          <option value='SYSTEMS'>Systems</option>
+          <option value='LANGUAGES'>Languages</option>
         </select>
       </label>
 
