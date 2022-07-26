@@ -8,6 +8,9 @@ import { DatePicker } from '@mantine/dates';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrEdit } from 'react-icons/gr';
 import { AiOutlineDelete } from 'react-icons/ai';
+import Input from './Layout/Input';
+import Form from './Layout/Form';
+import FormButton from './Layout/FormButton';
 
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
@@ -24,7 +27,7 @@ export default function Education() {
   if (isLoading || !data) return <div>Loading...</div>;
 
   return (
-    <div className='mt-6'>
+    <div className="mt-6">
       <EducationHeading onCreateEditEducation={onCreateEditEducation} />
 
       {createEditEducation && (
@@ -56,14 +59,13 @@ export default function Education() {
 function EducationHeading({ onCreateEditEducation }: any) {
   return (
     <div>
-      <div className='flex justify-between border-b-2 border-b-black mb-4'>
-        <h1 className='text-3xl'>Education</h1>
+      <div className="flex justify-between border-b-2 border-b-black mb-4">
+        <h1 className="text-3xl">Education</h1>
       </div>
 
       <button
-        className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'
-        onClick={onCreateEditEducation}
-      >
+        className="p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4"
+        onClick={onCreateEditEducation}>
         Add New Education
       </button>
     </div>
@@ -77,6 +79,48 @@ function ViewEducation({
   onCreateEditEducation,
 }: any) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
+
+  return (
+    <>
+      {!showDeleteButton && (
+        <div
+          className="mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer"
+          onClick={() => setShowDeleteButton(true)}>
+          <>
+            <p className="opacity-70 text-2xl">{education?.school}</p>
+            <div className="flex mb-2 text-sm">
+              <p className="opacity-70">
+                {moment(education?.startDate).format('MMMM YYYY')}
+              </p>
+              <span className="mx-2">to</span>
+              <p className="opacity-70">
+                {moment(education?.endDate).format('MMMM YYYY')}
+              </p>
+            </div>
+            <p className="opacity-70">{education?.degree}</p>
+            <p className="opacity-70">{education?.field}</p>
+          </>
+        </div>
+      )}
+
+      {showDeleteButton && (
+        <DeleteEducation
+          education={education}
+          setEditEducation={setEditEducation}
+          setShowDeleteButton={setShowDeleteButton}
+          onCreateEditEducation={onCreateEditEducation}
+        />
+      )}
+    </>
+  );
+}
+
+function DeleteEducation({
+  education,
+  setEditEducation,
+  setShowDeleteButton,
+  onCreateEditEducation,
+}: any) {
   const client = trpc.useContext();
   const { mutate: deleteEducation, isLoading } = trpc.useMutation(
     ['education.delete'],
@@ -103,59 +147,33 @@ function ViewEducation({
 
   return (
     <>
-      {!showDeleteButton && (
+      <div className="border border-black rounded h-36 flex justify-center items-center gap-4 relative">
+        <AiFillCloseCircle
+          className="text-3xl hover:opacity-50 cursor-pointer text-red-600 absolute right-6 top-6"
+          onClick={() => setShowDeleteButton(false)}
+        />
+
         <div
-          className='mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer'
-          onClick={() => setShowDeleteButton(true)}
-        >
-          <>
-            <p className='opacity-70 text-2xl'>{education?.school}</p>
-            <div className='flex mb-2 text-sm'>
-              <p className='opacity-70'>
-                {moment(education?.startDate).format('MMMM YYYY')}
-              </p>
-              <span className='mx-2'>to</span>
-              <p className='opacity-70'>
-                {moment(education?.endDate).format('MMMM YYYY')}
-              </p>
-            </div>
-            <p className='opacity-70'>{education?.degree}</p>
-            <p className='opacity-70'>{education?.field}</p>
-          </>
+          className="flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer"
+          onClick={() => {
+            setEditEducation(education);
+            setShowDeleteButton(false);
+            onCreateEditEducation();
+          }}>
+          <p className="text-sm"> Click to Edit</p>
+          <GrEdit className="text-lg  text-white" />
         </div>
-      )}
 
-      {showDeleteButton && (
-        <div className='border border-black rounded h-36 flex justify-center items-center gap-4 relative'>
-          <AiFillCloseCircle
-            className='text-3xl hover:opacity-50 cursor-pointer text-red-600 absolute right-6 top-6'
-            onClick={() => setShowDeleteButton(false)}
-          />
-
-          <div
-            className='flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer'
-            onClick={() => {
-              setEditEducation(education);
-              setShowDeleteButton(false);
-              onCreateEditEducation();
-            }}
-          >
-            <p className='text-sm'> Click to Edit</p>
-            <GrEdit className='text-lg  text-white' />
-          </div>
-
-          <div
-            className='flex gap-2 p-2 bg-gray-300 text-red-600 w-[135px] rounded hover:opacity-60 cursor-pointer'
-            onClick={() => {
-              onDeleteEducation();
-              setShowDeleteButton(false);
-            }}
-          >
-            <p className='text-sm'>Click to Delete</p>
-            <AiOutlineDelete className='text-lg text-red-600  ' />
-          </div>
+        <div
+          className="flex gap-2 p-2 bg-gray-300 text-red-600 w-[135px] rounded hover:opacity-60 cursor-pointer"
+          onClick={() => {
+            onDeleteEducation();
+            setShowDeleteButton(false);
+          }}>
+          <p className="text-sm">Click to Delete</p>
+          <AiOutlineDelete className="text-lg text-red-600  " />
         </div>
-      )}
+      </div>
     </>
   );
 }
@@ -234,20 +252,17 @@ function CreateEditEducation({
   } = useForm();
 
   return (
-    <div className='mt-6 '>
-      <form
-        className='grid grid-cols-1 gap-y-4  p-8 rounded-lg box-shadow'
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className='flex justify-between border-b-2 border-b-black mb-4 pb-2'>
+    <div className="mt-6 ">
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-between border-b-2 border-b-black mb-4 pb-2">
           {Object.keys(editEducation).length === 0 ? (
-            <h1 className='text-xl'>Add New Education</h1>
+            <h1 className="text-xl">Add New Education</h1>
           ) : (
-            <h1 className='text-xl'>Edit Education</h1>
+            <h1 className="text-xl">Edit Education</h1>
           )}
 
           <AiFillCloseCircle
-            className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
+            className="text-2xl hover:opacity-50 cursor-pointer text-red-600"
             onClick={() => {
               onCreateEditEducation();
               setEditEducation({});
@@ -255,74 +270,42 @@ function CreateEditEducation({
           />
         </div>
 
-        <label className='block'>
-          <span className='text-gray-700'>School</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('school', {
-              required: true,
-              value: editEducation?.school,
-            })}
-          />
-        </label>
+        <Input
+          label="School"
+          register={register('school', {
+            required: true,
+            value: editEducation?.school,
+          })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Degree</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('degree', { value: editEducation?.degree })}
-          />
-        </label>
+        <Input
+          label="degree"
+          register={register('degree', { value: editEducation?.degree })}
+        />
 
-        <label className='block'>
-          <span className='text-gray-700'>Field</span>
-          <input
-            type='text'
-            className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
-            {...register('field', { value: editEducation?.field })}
-          />
-        </label>
+        <Input
+          label="Field"
+          register={register('field', { value: editEducation?.field })}
+        />
 
         <DatePicker
-          placeholder='Pick date'
-          label='Start date'
+          placeholder="Pick date"
+          label="Start date"
           value={startDate}
           onChange={(date) => setStartDate(date)}
           required
         />
 
         <DatePicker
-          placeholder='Pick date'
-          label='End date'
+          placeholder="Pick date"
+          label="End date"
           value={endDate}
           onChange={(date) => setEndDate(date)}
           required
         />
 
-        <button
-          disabled={isLoading}
-          type='submit'
-          className='my-4 capitalize bg-darkGrey text-white font-medium py-2 px-4 rounded-md hover:opacity-70'
-        >
-          {isLoading ? (
-            <span className='flex items-center justify-center'>
-              <svg
-                className='w-6 h-6 animate-spin mr-1'
-                fill='currentColor'
-                viewBox='0 0 20 20'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path d='M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z' />
-              </svg>
-              Submitting...
-            </span>
-          ) : (
-            <span>Submit</span>
-          )}
-        </button>
-      </form>
+        <FormButton isLoading={isLoading} />
+      </Form>
     </div>
   );
 }
