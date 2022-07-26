@@ -9,20 +9,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { GrEdit } from 'react-icons/gr';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-type Skill = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string | null;
-  name: string;
-  skill: string;
-};
 
-type Skills = {
-  frameworks: Skill[];
-  system: Skill[];
-  languages: Skill[];
-};
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
@@ -35,30 +22,16 @@ export default function Skill() {
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
+    console.log(data)
 
   if (isLoading || !data) return <div>Loading...</div>;
 
-  const skills: Skills = {
-    frameworks: [],
-    system: [],
-    languages: [],
-  };
-
-  data.forEach((skill: Skill) => {
-    if (skill.skill === 'FRAMEWORKS') {
-      skills.frameworks.push(skill);
-    } else if (skill.skill === 'SYSTEM') {
-      skills.system.push(skill);
-    } else {
-      skills.languages.push(skill);
-    }
-  });
 
   return (
     <div className='mt-6'>
       <SkillHeading onCreateEditEducation={onCreateEditEducation} />
 
-      <ViewSkills skills={skills} />
+      <ViewSkills skills={data} />
     </div>
   );
 }

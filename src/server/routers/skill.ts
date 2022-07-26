@@ -20,13 +20,22 @@ const defaultSkillSelect = Prisma.validator<Prisma.SkillSelect>()({
   updatedAt: true,
 });
 
-// id        String     @id @default(uuid())
-//   createdAt DateTime   @default(now())
-//   updatedAt DateTime   @updatedAt
-//   name      String
-//   User      User?      @relation(fields: [userId], references: [id])
-//   userId    String?
-//   skill     SkillGroup
+
+type Skill = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string | null;
+  name: string;
+  skill: string;
+};
+
+type Skills = {
+  frameworks: Skill[];
+  system: Skill[];
+  languages: Skill[];
+};
+
 
 export const skillRouter = createRouter()
   .query('getById', {
@@ -48,7 +57,25 @@ export const skillRouter = createRouter()
           message: `No post with id '${id}'`,
         });
       }
-      return skill;
+
+
+      const skills: Skills= {
+        frameworks: [],
+        system: [],
+        languages: [],
+      };
+    
+      skill.forEach((skill: Skill) => {
+        if (skill.skill === 'FRAMEWORKS') {
+          skills.frameworks.push(skill);
+        } else if (skill.skill === 'SYSTEM') {
+          skills.system.push(skill);
+        } else {
+          skills.languages.push(skill);
+        }
+      });
+
+      return skills;
     },
   })
   .mutation('add', {
