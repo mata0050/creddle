@@ -11,24 +11,24 @@ import Form from "./Layout/Form";
 import { useAllUserContext } from '~/context/UserContext';
 
 export default function BasicInformation() {
-const {allUsers }  = useAllUserContext();
+const { selectedUser }  = useAllUserContext();
 
   const [showCreateUser, setShowCreateUser] = useState(false);
   const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
 
 
-  if (!allUsers) return <div>Loading...</div>;
+  if (!selectedUser) return <div>Loading...</div>;
 
   return (
     <>
       {!showCreateUser && (
         <ViewBasicInformation
-          user={allUsers[0]}
+          user={selectedUser}
           onShowCreateUser={onShowCreateUser}
         />
       )}
       {showCreateUser && (
-        <CreateEditUser user={allUsers[0]} onShowCreateUser={onShowCreateUser} />
+        <CreateEditUser user={selectedUser} onShowCreateUser={onShowCreateUser} />
       )}
     </>
   );
