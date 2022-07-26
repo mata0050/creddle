@@ -6,8 +6,7 @@ import moment from 'moment';
 import toast from 'react-hot-toast';
 import { DatePicker } from '@mantine/dates';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { GrEdit } from 'react-icons/gr';
-import { AiOutlineDelete } from 'react-icons/ai';
+import EditDeleteButtons from './Layout/EditDeleteButtons';
 import Input from './Layout/Input';
 import Form from './Layout/Form';
 import FormButton from './Layout/FormButton';
@@ -80,6 +79,8 @@ function ViewEducation({
 }: any) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
+  console.log(showDeleteButton);
+
   return (
     <>
       {!showDeleteButton && (
@@ -145,35 +146,24 @@ function DeleteEducation({
     }
   };
 
+  const onEdit = () => {
+    setEditEducation(education);
+    setShowDeleteButton(false);
+    onCreateEditEducation();
+  };
+
+  const onDelete = () => {
+    onDeleteEducation();
+    setShowDeleteButton(false);
+  };
+
   return (
     <>
-      <div className="border border-black rounded h-36 flex justify-center items-center gap-4 relative">
-        <AiFillCloseCircle
-          className="text-3xl hover:opacity-50 cursor-pointer text-red-600 absolute right-6 top-6"
-          onClick={() => setShowDeleteButton(false)}
-        />
-
-        <div
-          className="flex gap-2 p-2 bg-gray-400 text-white w-[120px] rounded hover:opacity-60 cursor-pointer"
-          onClick={() => {
-            setEditEducation(education);
-            setShowDeleteButton(false);
-            onCreateEditEducation();
-          }}>
-          <p className="text-sm"> Click to Edit</p>
-          <GrEdit className="text-lg  text-white" />
-        </div>
-
-        <div
-          className="flex gap-2 p-2 bg-gray-300 text-red-600 w-[135px] rounded hover:opacity-60 cursor-pointer"
-          onClick={() => {
-            onDeleteEducation();
-            setShowDeleteButton(false);
-          }}>
-          <p className="text-sm">Click to Delete</p>
-          <AiOutlineDelete className="text-lg text-red-600  " />
-        </div>
-      </div>
+      <EditDeleteButtons
+        onClose={() => setShowDeleteButton(false)}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </>
   );
 }
