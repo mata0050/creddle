@@ -8,14 +8,13 @@ import Input from "./Layout/Input";
 import TextArea from "./Layout/TextArea";
 import FormButton from "./Layout/FormButton";
 import Form from "./Layout/Form";
-import { useAllUserContext } from '~/context/UserContext';
+import { useAllUserContext } from "~/context/UserContext";
 
 export default function BasicInformation() {
-const { selectedUser }  = useAllUserContext();
+  const { selectedUser } = useAllUserContext();
 
   const [showCreateUser, setShowCreateUser] = useState(false);
   const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
-
 
   if (!selectedUser) return <div>Loading...</div>;
 
@@ -28,7 +27,10 @@ const { selectedUser }  = useAllUserContext();
         />
       )}
       {showCreateUser && (
-        <CreateEditUser user={selectedUser} onShowCreateUser={onShowCreateUser} />
+        <CreateEditUser
+          user={selectedUser}
+          onShowCreateUser={onShowCreateUser}
+        />
       )}
     </>
   );
@@ -160,7 +162,11 @@ function ViewBasicInformation({ user, onShowCreateUser }: any) {
       <p className='opacity-70'>{`github.com/${user?.github}`}</p>
       <p className='opacity-70'>{user?.location}</p>
 
-      <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>Summary</h2>
+      {user?.summary && (
+        <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>
+          Summary
+        </h2>
+      )}
       <p>{user?.summary}</p>
     </div>
   );
