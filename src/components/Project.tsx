@@ -15,7 +15,20 @@ import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import { useAllUserContext } from "~/context/UserContext";
 
 export default function Project() {
+    const { selectedUser } = useAllUserContext();
+    const utils = trpc.useContext();
+    const { data, isLoading } = trpc.useQuery([
+      "education.getById",
+      { id: selectedUser?.id },
+    ]);
   return (
     <div>Project</div>
   )
+}
+
+
+function ViewProject(){
+    return(<div>
+
+    </div>)
 }
