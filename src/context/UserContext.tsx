@@ -12,13 +12,21 @@ type UserContextType = {
 };
 
 type GlobalContentType = {
-  selectedUser: UserContextType | null;
-  setSelectedUser: (user: UserContextType | null) => void;
+  selectedUser: UserContextType | undefined;
+  setSelectedUser: (user: UserContextType | undefined) => void;
   allUsers: UserContextType[] | [] | undefined;
 };
 
 export const UserContext = createContext<GlobalContentType>({
-  selectedUser: null,
+  selectedUser: {
+    email: "",
+    firstName: "",
+    lastName: "",
+    github: "",
+    id: "",
+    location: "",
+    phone: "",
+  },
   setSelectedUser: () => {},
   allUsers: [],
 });
@@ -26,17 +34,18 @@ export const UserContext = createContext<GlobalContentType>({
 export function UserContextProvided({ children }: any) {
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery(["user.getAllUsers"]);
-  const [selectedUser, setSelectedUser] = useState<UserContextType | null>(data !== undefined && data[0])
-
+  const [selectedUser, setSelectedUser] = useState<UserContextType | undefined>(
+    data !== undefined ? data[0] : undefined
+  );
 
   return (
     <div>
-      <UserContext.Provider value={{ selectedUser, setSelectedUser, allUsers: data }}>
+      <UserContext.Provider
+        value={{ selectedUser, setSelectedUser, allUsers: data }}>
         {children}
       </UserContext.Provider>
     </div>
   );
 }
 
-
-export const useAllUserContext = () =>  useContext(UserContext);
+export const useAllUserContext = () => useContext(UserContext);

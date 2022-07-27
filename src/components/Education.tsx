@@ -10,14 +10,16 @@ import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
+import { useAllUserContext } from "~/context/UserContext";
 
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
+  const { selectedUser } = useAllUserContext();
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
     "education.getById",
-    { id: "4e06def1-53e4-436a-894d-7260814df125" },
+    { id: selectedUser?.id },
   ]);
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
@@ -34,6 +36,7 @@ export default function Education() {
           onCreateEditEducation={onCreateEditEducation}
           editEducation={editEducation}
           setEditEducation={setEditEducation}
+          selectedUser={selectedUser}
         />
       )}
 
@@ -144,6 +147,7 @@ function CreateEditEducation({
   onCreateEditEducation,
   editEducation,
   setEditEducation,
+  selectedUser,
 }: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -165,7 +169,7 @@ function CreateEditEducation({
         toast.success("Adding Education Successful");
         client.invalidateQueries([
           "education.getById",
-          { id: "4e06def1-53e4-436a-894d-7260814df125" },
+          { id: selectedUser.id },
         ]);
       },
     }
@@ -174,10 +178,7 @@ function CreateEditEducation({
   const { mutate: editUser } = trpc.useMutation(["education.edit"], {
     onSuccess: () => {
       toast.success("Edit Education Successful");
-      client.invalidateQueries([
-        "education.getById",
-        { id: "4e06def1-53e4-436a-894d-7260814df125" },
-      ]);
+      client.invalidateQueries(["education.getById", { id: selectedUser.id }]);
     },
   });
 
@@ -189,7 +190,7 @@ function CreateEditEducation({
           id: editEducation.id,
           startDate,
           endDate,
-          userId: "4e06def1-53e4-436a-894d-7260814df125",
+          userId: selectedUser.id,
         });
         return onCreateEditEducation();
       }
@@ -198,7 +199,7 @@ function CreateEditEducation({
         ...data,
         startDate,
         endDate,
-        userId: "4e06def1-53e4-436a-894d-7260814df125",
+        userId: selectedUser.id,
       });
       onCreateEditEducation();
     } catch (error) {

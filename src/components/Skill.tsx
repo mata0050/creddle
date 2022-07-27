@@ -12,14 +12,16 @@ import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
+import { useAllUserContext } from "~/context/UserContext";
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
+  const { selectedUser } = useAllUserContext();
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
     "skill.getById",
-    { id: "4e06def1-53e4-436a-894d-7260814df125" },
+    { id: selectedUser?.id },
   ]);
   const [addSkill, setAddSkill] = useState(false);
 
@@ -35,7 +37,9 @@ export default function Skill() {
   return (
     <div className='mt-6'>
       <SkillHeading />
-      {addSkill && <AddSkill onShowSkill={onShowSkill} />}
+      {addSkill && (
+        <AddSkill onShowSkill={onShowSkill} selectedUser={selectedUser} />
+      )}
       <ViewSkills skills={data} onShowSkill={onShowSkill} />
     </div>
   );
@@ -106,11 +110,17 @@ function ViewSkills({ skills, onShowSkill }: any) {
             Add Skill
           </button>
 
-          <Skills title='Frameworks' skills={skills} section='frameworks' />
+          {skills.frameworks.length !== 0 && (
+            <Skills title='Frameworks' skills={skills} section='frameworks' />
+          )}
 
-          <Skills title='Systems' skills={skills} section='system' />
+          {skills.system.length !== 0 && (
+            <Skills title='Systems' skills={skills} section='system' />
+          )}
 
-          <Skills title='Languages' skills={skills} section='languages' />
+          {skills.languages.length !== 0 && (
+            <Skills title='Languages' skills={skills} section='languages' />
+          )}
         </>
       )}
 
@@ -128,7 +138,7 @@ function ViewSkills({ skills, onShowSkill }: any) {
   );
 }
 
-function AddSkill({ onShowSkill }: any) {
+function AddSkill({ onShowSkill, selectedUser }: any) {
   const client = trpc.useContext();
   const {
     register,
@@ -140,10 +150,7 @@ function AddSkill({ onShowSkill }: any) {
   const { mutate: addSkill, isLoading } = trpc.useMutation(["skill.add"], {
     onSuccess: () => {
       toast.success("Add Skill Successful");
-      client.invalidateQueries([
-        "skill.getById",
-        { id: "4e06def1-53e4-436a-894d-7260814df125" },
-      ]);
+      client.invalidateQueries(["skill.getById", { id: selectedUser?.id }]);
     },
   });
 
@@ -152,7 +159,7 @@ function AddSkill({ onShowSkill }: any) {
     try {
       addSkill({
         ...data,
-        userId: "4e06def1-53e4-436a-894d-7260814df125",
+        userId: selectedUser?.id,
       });
       onShowSkill();
     } catch (error) {
