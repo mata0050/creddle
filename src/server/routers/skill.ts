@@ -4,13 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createRouter } from "../createRouter";
 
-// id        String   @id @default(uuid())
-// createdAt DateTime @default(now())
-// updatedAt DateTime @updatedAt
-// name      String
-// User      User?    @relation(fields: [userId], references: [id])
-// userId    String?
-
 const defaultSkillSelect = Prisma.validator<Prisma.SkillSelect>()({
   id: true,
   name: true,

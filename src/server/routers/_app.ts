@@ -30,6 +30,7 @@ export const appRouter = createRouter()
    */
   .merge("user.", userRouter)
   .merge("education.", educationRouter)
-  .merge("skill.", skillRouter);
+  .merge("skill.", skillRouter)
+  .merge("project.", educationRouter);
 
 export type AppRouter = typeof appRouter;
