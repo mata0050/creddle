@@ -1,5 +1,6 @@
 import BasicInformation from "~/components/BasicInformation";
 import Education from "~/components/Education";
+import Project from '~/components/Project';
 import SelectUser from '~/components/SelectUser';
 import Skill from "~/components/Skill";
 import { UserContextProvided } from "~/context/UserContext";
@@ -13,6 +14,7 @@ export default function Home<NextPage>() {
           <BasicInformation />
           <Education />
           <Skill />
+          <Project/>
         </UserContextProvided>
       </div>
     </div>

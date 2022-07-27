@@ -13,6 +13,7 @@ import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import { useAllUserContext } from "~/context/UserContext";
+import Heading from "./Layout/Heading";
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
@@ -36,7 +37,7 @@ export default function Skill() {
 
   return (
     <div className='mt-6'>
-      <SkillHeading />
+      <Heading heading='Skills' />
       {addSkill && (
         <AddSkill onShowSkill={onShowSkill} selectedUser={selectedUser} />
       )}
@@ -45,15 +46,6 @@ export default function Skill() {
   );
 }
 
-function SkillHeading() {
-  return (
-    <div>
-      <div className='flex justify-between border-b-2 border-b-black mb-4'>
-        <h1 className='text-3xl'>Skills</h1>
-      </div>
-    </div>
-  );
-}
 
 function ViewSkills({ skills, onShowSkill }: any) {
   const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);

@@ -9,6 +9,7 @@ import TextArea from "./Layout/TextArea";
 import FormButton from "./Layout/FormButton";
 import Form from "./Layout/Form";
 import { useAllUserContext } from "~/context/UserContext";
+import Heading from "./Layout/Heading";
 
 export default function BasicInformation() {
   const { selectedUser } = useAllUserContext();
@@ -162,11 +163,7 @@ function ViewBasicInformation({ user, onShowCreateUser }: any) {
       <p className='opacity-70'>{`github.com/${user?.github}`}</p>
       <p className='opacity-70'>{user?.location}</p>
 
-      {user?.summary && (
-        <h2 className='text-3xl my-4 border-b-2 border-b-black pb-2'>
-          Summary
-        </h2>
-      )}
+      {user?.summary && <Heading heading='Summary' />}
       <p>{user?.summary}</p>
     </div>
   );

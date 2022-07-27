@@ -13,22 +13,26 @@ import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import { useAllUserContext } from "~/context/UserContext";
+import Heading from "./Layout/Heading";
 
 export default function Project() {
-    const { selectedUser } = useAllUserContext();
-    const utils = trpc.useContext();
-    const { data, isLoading } = trpc.useQuery([
-      "education.getById",
-      { id: selectedUser?.id },
-    ]);
+  const { selectedUser } = useAllUserContext();
+  const utils = trpc.useContext();
+  const { data, isLoading } = trpc.useQuery([
+    "education.getById",
+    { id: selectedUser?.id },
+  ]);
   return (
-    <div>Project</div>
-  )
+    <div className='mt-8'>
+      <ViewProject />
+    </div>
+  );
 }
 
-
-function ViewProject(){
-    return(<div>
-
-    </div>)
+function ViewProject() {
+  return (
+    <div>
+      <Heading heading='Project' />
+    </div>
+  );
 }

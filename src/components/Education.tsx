@@ -11,6 +11,7 @@ import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import { useAllUserContext } from "~/context/UserContext";
+import Heading from "./Layout/Heading";
 
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
@@ -61,9 +62,7 @@ export default function Education() {
 function EducationHeading({ onCreateEditEducation }: any) {
   return (
     <div>
-      <div className='flex justify-between border-b-2 border-b-black mb-4'>
-        <h1 className='text-3xl'>Education</h1>
-      </div>
+      <Heading heading='Education' />
 
       <button
         className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'
@@ -81,8 +80,6 @@ function ViewEducation({
   onCreateEditEducation,
 }: any) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-
-  console.log(showDeleteButton);
 
   return (
     <>
