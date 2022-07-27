@@ -80,7 +80,7 @@ function ViewSkills({ skills, onShowSkill }: any) {
     <>
       <h1 className='text-xl uppercase my-4'>{title}</h1>
 
-      <div className='flex gap-3'>
+      <div className='flex gap-3 flex-wrap'>
         {skills.frameworks !== 0 &&
           skills[section].map((skill: any) => (
             <p
