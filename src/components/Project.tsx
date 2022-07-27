@@ -19,20 +19,30 @@ export default function Project() {
   const { selectedUser } = useAllUserContext();
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
-    "education.getById",
+    "project.getById",
     { id: selectedUser?.id },
   ]);
   return (
     <div className='mt-8'>
-      <ViewProject />
+      <ViewProject projects={data} />
     </div>
   );
 }
 
-function ViewProject() {
+function ViewProject({ projects }: any) {
   return (
     <div>
       <Heading heading='Project' />
+
+      {projects !== undefined &&
+        projects.map((project: any) => (
+          <>
+            <div className='flex justify-between'>
+              <h3>{project.name}</h3>
+              <p >{project.link}</p>
+            </div>
+          </>
+        ))}
     </div>
   );
 }

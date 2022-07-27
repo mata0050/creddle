@@ -16,7 +16,7 @@ const defaultProjectSelect = Prisma.validator<Prisma.ProjectSelect>()({
     updatedAt: true,
 });
 
-export const educationRouter = createRouter()
+export const projectRouter = createRouter()
     .query("getById", {
         input: z.object({
             id: z.string(),
