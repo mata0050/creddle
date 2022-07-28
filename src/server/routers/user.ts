@@ -2,6 +2,7 @@ import { prisma } from "../../db/prisma";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createRouter } from "../createRouter";
+import { TRPCError } from "@trpc/server";
 
 const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
@@ -15,11 +16,48 @@ const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
 });
 
 export const userRouter = createRouter()
+  .query("getById", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input }) {
+      const { id } = input;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          education: true,
+          skills: true,
+          projects: true,
+          employment: true,
+        },
+        // select: defaultUserSelect,
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `No post with id '${id}'`,
+        });
+      }
+
+
+      return user;
+    },
+  })
   .query("getAllUsers", {
     async resolve() {
       const users = await prisma.user.findMany({
-        select: defaultUserSelect,
+        include: {
+          education: true,
+          skills: true,
+          projects: true,
+          employment: true,
+        },
+        // select: defaultUserSelect,
       });
+      console.log(users)
       return users;
     },
   })

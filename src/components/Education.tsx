@@ -13,10 +13,10 @@ import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
 import Button from "./Layout/Button";
 
+
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
   const { selectedUser } = useAllUserContext();
-
 
   const { data, isLoading } = trpc.useQuery([
     "education.getById",
@@ -26,7 +26,10 @@ export default function Education() {
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (!selectedUser || !data) return <div>Loading...</div>;
+
+  console.log(data)
+  console.log(selectedUser)
 
   return (
     <div className='mt-6'>
@@ -43,7 +46,7 @@ export default function Education() {
 
       {!createEditEducation && (
         <>
-          {data.map((data, index) => (
+          {selectedUser.education.map((data, index) => (
             <div key={index}>
               <ViewEducation
                 education={data}
@@ -118,6 +121,7 @@ function DeleteEducation({
   setShowDeleteButton,
   onCreateEditEducation,
 }: any) {
+  const { selectedUser } = useAllUserContext();
   const onEdit = () => {
     setEditEducation(education);
     setShowDeleteButton(false);
@@ -130,7 +134,7 @@ function DeleteEducation({
       onEdit={onEdit}
       trpcString='education.delete'
       invalidateQueries='education.getById'
-      queryID='4e06def1-53e4-436a-894d-7260814df125'
+      queryID={selectedUser.id}
       deleteItem={education}
     />
   );
