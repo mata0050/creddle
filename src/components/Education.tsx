@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { useForm } from "react-hook-form";
-import superjson from "superjson";
 import moment from "moment";
 import toast from "react-hot-toast";
 import { DatePicker } from "@mantine/dates";
@@ -12,12 +11,13 @@ import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
+import Button from "./Layout/Button";
 
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
   const { selectedUser } = useAllUserContext();
 
-  const utils = trpc.useContext();
+
   const { data, isLoading } = trpc.useQuery([
     "education.getById",
     { id: selectedUser?.id },
@@ -64,11 +64,7 @@ function EducationHeading({ onCreateEditEducation }: any) {
     <div>
       <Heading heading='Education' />
 
-      <button
-        className='p-2 bg-gray-400 text-white rounded hover:opacity-70 text-sm mb-4'
-        onClick={onCreateEditEducation}>
-        Add New Education
-      </button>
+      <Button title='Add New Education' onClick={onCreateEditEducation} />
     </div>
   );
 }

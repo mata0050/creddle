@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { useForm } from "react-hook-form";
-import superjson from "superjson";
-import moment from "moment";
 import toast from "react-hot-toast";
-import { DatePicker } from "@mantine/dates";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { GrEdit } from "react-icons/gr";
-import { AiOutlineDelete } from "react-icons/ai";
 import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
+import Button from "./Layout/Button";
 
 export default function Skill() {
   const [editEducation, setEditEducation] = useState({});
@@ -45,7 +41,6 @@ export default function Skill() {
     </div>
   );
 }
-
 
 function ViewSkills({ skills, onShowSkill }: any) {
   const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);
@@ -96,11 +91,7 @@ function ViewSkills({ skills, onShowSkill }: any) {
     <>
       {!showEditDeleteButton && (
         <>
-          <button
-            className='p-2 bg-gray-500 text-sm text-white rounded hover:opacity-60 mb-2'
-            onClick={onShowSkill}>
-            Add Skill
-          </button>
+          <Button title='Add Skill' onClick={onShowSkill} />
 
           {skills.frameworks.length !== 0 && (
             <Skills title='Frameworks' skills={skills} section='frameworks' />
@@ -147,7 +138,6 @@ function AddSkill({ onShowSkill, selectedUser }: any) {
   });
 
   const onSubmit = async (data: any) => {
-    console.log("submit");
     try {
       addSkill({
         ...data,

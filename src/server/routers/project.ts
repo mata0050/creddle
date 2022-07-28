@@ -44,8 +44,8 @@ export const projectRouter = createRouter()
         input: z.object({
             name: z.string(),
             description: z.string(),
-            startDate: z.string(),
-            endDate: z.string(),
+            startDate: z.date(),
+            endDate: z.date(),
             link: z.string(),
             userId: z.string(),
         }),
