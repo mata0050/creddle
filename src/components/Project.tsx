@@ -21,6 +21,7 @@ export default function Project() {
   const { selectedUser } = useAllUserContext();
   const [editProject, setEditProject] = useState({});
   const [showAddProject, setShowAddProject] = useState(false);
+
   const onShowAddProject = () => setShowAddProject((prevState) => !prevState);
 
   const utils = trpc.useContext();
@@ -74,16 +75,42 @@ function HeadingProject({ onShowAddProject, setEditProject }: any) {
 }
 
 function ViewProject({ projects, onClick, onShowAddProject }: any) {
+  const { selectedUser } = useAllUserContext();
+  const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);
+  const [selectedProject, setSelectedProject] = useState({});
+
+  const onClickEditDeleteButton = (project: any) => {
+    setShowEditDeleteButton((prevState) => !prevState);
+    setSelectedProject(project);
+  };
+
+
+  const onEdit = () => {
+    onClick(selectedProject);
+    onShowAddProject();
+  };
+
   return (
     <>
+      {showEditDeleteButton && (
+        <EditDeleteButtons
+          onClose={onClickEditDeleteButton}
+          onEdit={onEdit}
+          trpcString='project.delete'
+          invalidateQueries='project.getById'
+          queryID={selectedUser.id}
+          deleteItem={selectedProject}
+        />
+      )}
+
       {projects !== undefined &&
+        !showEditDeleteButton &&
         projects.map((project: any) => (
           <div
             className='mb-4 p-3  hover:border-[1px] cursor-pointer border-black rounded'
             key={project.id}
             onClick={() => {
-              onClick(project);
-              onShowAddProject();
+              onClickEditDeleteButton(project);
             }}>
             <div className='flex justify-between mb-2'>
               <h3 className='text-xl '>{project.name}</h3>
@@ -155,8 +182,7 @@ function AddProject({
           userId: selectedUser.id,
           id: editProject.id,
         });
-       return  onShowAddProject();
-
+        return onShowAddProject();
       }
 
       addProject({
@@ -166,7 +192,6 @@ function AddProject({
         userId: selectedUser.id,
       });
       onShowAddProject();
-
     } catch (error) {
       toast.error("Please Filling out the project again");
     }
