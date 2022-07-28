@@ -19,6 +19,7 @@ import TextArea from "./Layout/TextArea";
 
 export default function Project() {
   const { selectedUser } = useAllUserContext();
+  const [editProject, setEditProject] = useState({});
   const [showAddProject, setShowAddProject] = useState(false);
   const onShowAddProject = () => setShowAddProject((prevState) => !prevState);
 
@@ -28,39 +29,62 @@ export default function Project() {
     { id: selectedUser?.id },
   ]);
 
-  console.log(showAddProject);
+  console.log(editProject);
 
   return (
     <div className='mt-8'>
-      <HeadingProject onShowAddProject={onShowAddProject} />
+      <HeadingProject
+        onShowAddProject={onShowAddProject}
+        setEditProject={setEditProject}
+      />
 
       {showAddProject && (
         <AddProject
           selectedUser={selectedUser}
           onShowAddProject={onShowAddProject}
+          editProject={editProject}
+          setEditProject={setEditProject}
         />
       )}
 
-      {showAddProject || <ViewProject projects={data} />}
+      {showAddProject || (
+        <ViewProject
+          projects={data}
+          onClick={setEditProject}
+          onShowAddProject={onShowAddProject}
+        />
+      )}
     </div>
   );
 }
 
-function HeadingProject({ onShowAddProject }: any) {
+function HeadingProject({ onShowAddProject, setEditProject }: any) {
   return (
     <>
       <Heading heading='Project' />
-      <Button title='Add Project' onClick={onShowAddProject} />
+      <Button
+        title='Add Project'
+        onClick={() => {
+          onShowAddProject();
+          setEditProject({});
+        }}
+      />
     </>
   );
 }
 
-function ViewProject({ projects }: any) {
+function ViewProject({ projects, onClick, onShowAddProject }: any) {
   return (
     <>
       {projects !== undefined &&
         projects.map((project: any) => (
-          <div className='mb-4' key={project.id}>
+          <div
+            className='mb-4 p-3  hover:border-[1px] cursor-pointer border-black rounded'
+            key={project.id}
+            onClick={() => {
+              onClick(project);
+              onShowAddProject();
+            }}>
             <div className='flex justify-between mb-2'>
               <h3 className='text-xl '>{project.name}</h3>
               <p className='w-36 text-ellipsis overflow-hidden'>
@@ -85,9 +109,18 @@ function ViewProject({ projects }: any) {
   );
 }
 
-function AddProject({ selectedUser, onShowAddProject }: any) {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+function AddProject({
+  selectedUser,
+  onShowAddProject,
+  editProject,
+  setEditProject,
+}: any) {
+  const [startDate, setStartDate] = useState<Date | null>(
+    editProject ? editProject.startDate : new Date()
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    editProject ? editProject.endDate : new Date()
+  );
 
   const client = trpc.useContext();
   const { mutate: addProject, isLoading } = trpc.useMutation(["project.add"], {
@@ -96,6 +129,14 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
       client.invalidateQueries(["project.getById", { id: selectedUser.id }]);
     },
   });
+
+  const { mutate: editProjectMutation, isLoading: editLoading } =
+    trpc.useMutation(["project.edit"], {
+      onSuccess: () => {
+        toast.success("Edit Project Successful");
+        client.invalidateQueries(["project.getById", { id: selectedUser.id }]);
+      },
+    });
 
   const {
     register,
@@ -106,12 +147,26 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
 
   const onSubmit = async (data: any) => {
     try {
+      if (Object.keys(editProject).length !== 0) {
+        editProjectMutation({
+          ...data,
+          startDate,
+          endDate,
+          userId: selectedUser.id,
+          id: editProject.id,
+        });
+       return  onShowAddProject();
+
+      }
+
       addProject({
         ...data,
         startDate,
         endDate,
         userId: selectedUser.id,
       });
+      onShowAddProject();
+
     } catch (error) {
       toast.error("Please Filling out the project again");
     }
@@ -125,7 +180,10 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
 
           <AiFillCloseCircle
             className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
-            onClick={onShowAddProject}
+            onClick={() => {
+              onShowAddProject();
+              setEditProject({});
+            }}
           />
         </div>
 
@@ -133,7 +191,7 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
           label='Name'
           register={register("name", {
             required: true,
-            //  \value: editEducation?.school,
+            value: editProject?.name,
           })}
         />
 
@@ -141,7 +199,7 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
           label='Link'
           register={register("link", {
             required: true,
-            //  \value: editEducation?.school,
+            value: editProject?.link,
           })}
         />
 
@@ -165,7 +223,7 @@ function AddProject({ selectedUser, onShowAddProject }: any) {
           label='Description'
           register={register("description", {
             required: true,
-            //  \value: editEducation?.school,
+            value: editProject?.description,
           })}
         />
         <FormButton isLoading={isLoading} />
