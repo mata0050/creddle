@@ -14,6 +14,7 @@ import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
 import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
+import Button from './Layout/Button';
 
 export default function Project() {
   const { selectedUser } = useAllUserContext();
@@ -27,6 +28,14 @@ export default function Project() {
       <ViewProject projects={data} />
     </div>
   );
+}
+
+
+function AddProject({}){
+    return(<>
+
+<Button tit></Button>
+    </>)
 }
 
 function ViewProject({ projects }: any) {
