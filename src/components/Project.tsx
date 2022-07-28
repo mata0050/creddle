@@ -37,10 +37,24 @@ function ViewProject({ projects }: any) {
       {projects !== undefined &&
         projects.map((project: any) => (
           <>
-            <div className='flex justify-between'>
-              <h3>{project.name}</h3>
-              <p >{project.link}</p>
+            <div className='flex justify-between mb-2'>
+              <h3 className='text-xl '>{project.name}</h3>
+              <p className='w-36 text-ellipsis overflow-hidden'>
+                {project.link}
+              </p>
             </div>
+
+            <div className='flex items-center gap-2 mb-2'>
+              <p className='text-sm'>
+                {moment(project.startDate).format("MMMM Do YYYY")}
+              </p>
+              <span>to</span>
+              <p className='text-sm'>
+                {moment(project.endDate).format("MMMM Do YYYY")}
+              </p>
+            </div>
+
+            <p>{project.description}</p>
           </>
         ))}
     </div>
