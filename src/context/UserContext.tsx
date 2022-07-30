@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { trpc } from '../utils/trpc';
 
-type UserType = {
+type User = {
   id: string;
   email: string;
   firstName: string;
@@ -11,25 +11,25 @@ type UserType = {
   phone: string;
 };
 
-type UsersContextType =
-  | (UserType & {
-      education: EducationType[];
-      skills: SkillType[];
-      projects: ProjectType[];
-      employment: EmploymentType[];
+type UsersProfileType =
+  | (User & {
+      education: Education[];
+      skills: Skill[];
+      projects: Project[];
+      employment: Employment[];
     })[]
   | undefined;
 
-type UserContextType =
-  | (UserType & {
-      education: EducationType[];
-      skills: SkillType[];
-      projects: ProjectType[];
-      employment: EmploymentType[];
+export type UserProfileType =
+  | (User & {
+      education: Education[];
+      skills: Skill[];
+      projects: Project[];
+      employment: Employment[];
     })
   | undefined;
 
-type EducationType = {
+type Education = {
   id: string;
   school: string;
   degree: string;
@@ -39,7 +39,7 @@ type EducationType = {
   userId: string | null;
 };
 
-type SkillType = {
+type Skill = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -48,7 +48,7 @@ type SkillType = {
   skill: string;
 };
 
-type ProjectType = {
+type Project = {
   id: string;
   name: string;
   description: string;
@@ -60,7 +60,7 @@ type ProjectType = {
   updatedAt: Date;
 };
 
-type EmploymentType = {
+type Employment = {
   id: string;
   createdAt: Date;
   updatedAt: Date;

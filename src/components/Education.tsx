@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { trpc } from "../utils/trpc";
-import { useForm } from "react-hook-form";
-import moment from "moment";
-import toast from "react-hot-toast";
-import { DatePicker } from "@mantine/dates";
-import { AiFillCloseCircle } from "react-icons/ai";
-import EditDeleteButtons from "./Layout/EditDeleteButtons";
-import Input from "./Layout/Input";
-import Form from "./Layout/Form";
-import FormButton from "./Layout/FormButton";
-import { useAllUserContext } from "~/context/UserContext";
-import Heading from "./Layout/Heading";
-import Button from "./Layout/Button";
+import React, { useEffect, useState } from 'react';
+import { trpc } from '../utils/trpc';
+import { useForm } from 'react-hook-form';
+import moment from 'moment';
+import toast from 'react-hot-toast';
+import { DatePicker } from '@mantine/dates';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import EditDeleteButtons from './Layout/EditDeleteButtons';
+import Input from './Layout/Input';
+import Form from './Layout/Form';
+import FormButton from './Layout/FormButton';
+import Heading from './Layout/Heading';
+import Button from './Layout/Button';
+import { UserProfileType } from '~/context/UserContext';
 
-
-export default function Education() {
+export default function Education({ currentUser }: any): JSX.Element {
   const [editEducation, setEditEducation] = useState({});
-  const { selectedUser } = useAllUserContext();
 
   const { data, isLoading } = trpc.useQuery([
-    "education.getById",
-    { id: selectedUser?.id },
+    'education.getById',
+    { id: currentUser?.id },
   ]);
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
-  if (!selectedUser || !data) return <div>Loading...</div>;
+  if (!currentUser || !data) return <div>Loading...</div>;
 
-  console.log(data)
-  console.log(selectedUser)
+  console.log(data);
+  console.log(currentUser);
 
   return (
     <div className='mt-6'>
@@ -40,13 +38,13 @@ export default function Education() {
           onCreateEditEducation={onCreateEditEducation}
           editEducation={editEducation}
           setEditEducation={setEditEducation}
-          selectedUser={selectedUser}
+          currentUser={currentUser}
         />
       )}
 
       {!createEditEducation && (
         <>
-          {selectedUser.education.map((data, index) => (
+          {currentUser.education.map((data: any, index: any) => (
             <div key={index}>
               <ViewEducation
                 education={data}
@@ -77,6 +75,7 @@ function ViewEducation({
   editEducation,
   setEditEducation,
   onCreateEditEducation,
+  currentUser,
 }: any) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
@@ -85,16 +84,17 @@ function ViewEducation({
       {!showDeleteButton && (
         <div
           className='mb-4 hover:border hover:border-black hover:rounded	p-4 cursor-pointer'
-          onClick={() => setShowDeleteButton(true)}>
+          onClick={() => setShowDeleteButton(true)}
+        >
           <>
             <p className='opacity-70 text-2xl'>{education?.school}</p>
             <div className='flex mb-2 text-sm'>
               <p className='opacity-70'>
-                {moment(education?.startDate).format("MMMM YYYY")}
+                {moment(education?.startDate).format('MMMM YYYY')}
               </p>
               <span className='mx-2'>to</span>
               <p className='opacity-70'>
-                {moment(education?.endDate).format("MMMM YYYY")}
+                {moment(education?.endDate).format('MMMM YYYY')}
               </p>
             </div>
             <p className='opacity-70'>{education?.degree}</p>
@@ -109,6 +109,7 @@ function ViewEducation({
           setEditEducation={setEditEducation}
           setShowDeleteButton={setShowDeleteButton}
           onCreateEditEducation={onCreateEditEducation}
+          currentUser={currentUser}
         />
       )}
     </>
@@ -120,8 +121,8 @@ function DeleteEducation({
   setEditEducation,
   setShowDeleteButton,
   onCreateEditEducation,
+  currentUser,
 }: any) {
-  const { selectedUser } = useAllUserContext();
   const onEdit = () => {
     setEditEducation(education);
     setShowDeleteButton(false);
@@ -134,7 +135,7 @@ function DeleteEducation({
       onEdit={onEdit}
       trpcString='education.delete'
       invalidateQueries='education.getById'
-      queryID={selectedUser.id}
+      queryID={currentUser.id}
       deleteItem={education}
     />
   );
@@ -144,7 +145,7 @@ function CreateEditEducation({
   onCreateEditEducation,
   editEducation,
   setEditEducation,
-  selectedUser,
+  currentUser,
 }: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -160,22 +161,19 @@ function CreateEditEducation({
 
   const client = trpc.useContext();
   const { mutate: addEducation, isLoading } = trpc.useMutation(
-    ["education.add"],
+    ['education.add'],
     {
       onSuccess: () => {
-        toast.success("Adding Education Successful");
-        client.invalidateQueries([
-          "education.getById",
-          { id: selectedUser.id },
-        ]);
+        toast.success('Adding Education Successful');
+        client.invalidateQueries(['education.getById', { id: currentUser.id }]);
       },
     }
   );
 
-  const { mutate: editUser } = trpc.useMutation(["education.edit"], {
+  const { mutate: editUser } = trpc.useMutation(['education.edit'], {
     onSuccess: () => {
-      toast.success("Edit Education Successful");
-      client.invalidateQueries(["education.getById", { id: selectedUser.id }]);
+      toast.success('Edit Education Successful');
+      client.invalidateQueries(['education.getById', { id: currentUser.id }]);
     },
   });
 
@@ -187,7 +185,7 @@ function CreateEditEducation({
           id: editEducation.id,
           startDate,
           endDate,
-          userId: selectedUser.id,
+          userId: currentUser.id,
         });
         return onCreateEditEducation();
       }
@@ -196,11 +194,11 @@ function CreateEditEducation({
         ...data,
         startDate,
         endDate,
-        userId: selectedUser.id,
+        userId: currentUser.id,
       });
       onCreateEditEducation();
     } catch (error) {
-      toast.error("Please Filling out the application again");
+      toast.error('Please Filling out the application again');
     }
   };
 
@@ -232,7 +230,7 @@ function CreateEditEducation({
 
         <Input
           label='School'
-          register={register("school", {
+          register={register('school', {
             required: true,
             value: editEducation?.school,
           })}
@@ -240,12 +238,12 @@ function CreateEditEducation({
 
         <Input
           label='degree'
-          register={register("degree", { value: editEducation?.degree })}
+          register={register('degree', { value: editEducation?.degree })}
         />
 
         <Input
           label='Field'
-          register={register("field", { value: editEducation?.field })}
+          register={register('field', { value: editEducation?.field })}
         />
 
         <DatePicker

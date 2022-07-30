@@ -17,56 +17,55 @@ import Heading from "./Layout/Heading";
 import Button from "./Layout/Button";
 import TextArea from "./Layout/TextArea";
 
-export default function Project() {
-  const { selectedUser } = useAllUserContext();
-  const [editProject, setEditProject] = useState({});
-  const [showAddProject, setShowAddProject] = useState(false);
+export default function Project({currentUser}:any) : JSX.Element {
 
-  const onShowAddProject = () => setShowAddProject((prevState) => !prevState);
+  const [editProject, setEditProject] = useState({});
+  const [showAddEditProject, setShowAddEditProject] = useState(false);
+
+  const onShowAddEditProject = () => setShowAddEditProject((prevState) => !prevState);
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
     "project.getById",
-    { id: selectedUser?.id },
+    { id: currentUser?.id },
   ]);
-
-  console.log(editProject);
 
   return (
     <div className='mt-8'>
       <HeadingProject
-        onShowAddProject={onShowAddProject}
+        onShowAddEditProject={onShowAddEditProject}
         setEditProject={setEditProject}
       />
 
-      {showAddProject && (
-        <AddProject
-          selectedUser={selectedUser}
-          onShowAddProject={onShowAddProject}
+      {showAddEditProject && (
+        <AddEditProject
+          currentUser={currentUser}
+          onShowAddEditProject={onShowAddEditProject}
           editProject={editProject}
           setEditProject={setEditProject}
         />
       )}
 
-      {showAddProject || (
+      {showAddEditProject || (
         <ViewProject
           projects={data}
           onClick={setEditProject}
-          onShowAddProject={onShowAddProject}
+          onShowAddEditProject={onShowAddEditProject}
+          currentUser={currentUser}
         />
       )}
     </div>
   );
 }
 
-function HeadingProject({ onShowAddProject, setEditProject }: any) {
+function HeadingProject({ onShowAddEditProject, setEditProject }: any) {
   return (
     <>
       <Heading heading='Project' />
       <Button
         title='Add Project'
         onClick={() => {
-          onShowAddProject();
+          onShowAddEditProject();
           setEditProject({});
         }}
       />
@@ -74,8 +73,8 @@ function HeadingProject({ onShowAddProject, setEditProject }: any) {
   );
 }
 
-function ViewProject({ projects, onClick, onShowAddProject }: any) {
-  const { selectedUser } = useAllUserContext();
+function ViewProject({ projects, onClick, onShowAddEditProject, currentUser }: any) {
+
   const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
 
@@ -87,7 +86,7 @@ function ViewProject({ projects, onClick, onShowAddProject }: any) {
 
   const onEdit = () => {
     onClick(selectedProject);
-    onShowAddProject();
+    onShowAddEditProject();
   };
 
   return (
@@ -98,7 +97,7 @@ function ViewProject({ projects, onClick, onShowAddProject }: any) {
           onEdit={onEdit}
           trpcString='project.delete'
           invalidateQueries='project.getById'
-          queryID={selectedUser.id}
+          queryID={currentUser.id}
           deleteItem={selectedProject}
         />
       )}
@@ -136,9 +135,9 @@ function ViewProject({ projects, onClick, onShowAddProject }: any) {
   );
 }
 
-function AddProject({
-  selectedUser,
-  onShowAddProject,
+function AddEditProject({
+  currentUser,
+  onShowAddEditProject,
   editProject,
   setEditProject,
 }: any) {
@@ -153,7 +152,7 @@ function AddProject({
   const { mutate: addProject, isLoading } = trpc.useMutation(["project.add"], {
     onSuccess: () => {
       toast.success("Adding Project Successful");
-      client.invalidateQueries(["project.getById", { id: selectedUser.id }]);
+      client.invalidateQueries(["project.getById", { id: currentUser.id }]);
     },
   });
 
@@ -161,7 +160,7 @@ function AddProject({
     trpc.useMutation(["project.edit"], {
       onSuccess: () => {
         toast.success("Edit Project Successful");
-        client.invalidateQueries(["project.getById", { id: selectedUser.id }]);
+        client.invalidateQueries(["project.getById", { id: currentUser.id }]);
       },
     });
 
@@ -179,19 +178,19 @@ function AddProject({
           ...data,
           startDate,
           endDate,
-          userId: selectedUser.id,
+          userId: currentUser.id,
           id: editProject.id,
         });
-        return onShowAddProject();
+        return onShowAddEditProject();
       }
 
       addProject({
         ...data,
         startDate,
         endDate,
-        userId: selectedUser.id,
+        userId: currentUser.id,
       });
-      onShowAddProject();
+      onShowAddEditProject();
     } catch (error) {
       toast.error("Please Filling out the project again");
     }
@@ -206,7 +205,7 @@ function AddProject({
           <AiFillCloseCircle
             className='text-2xl hover:opacity-50 cursor-pointer text-red-600'
             onClick={() => {
-              onShowAddProject();
+              onShowAddEditProject();
               setEditProject({});
             }}
           />

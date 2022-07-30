@@ -11,14 +11,14 @@ import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
 import Button from "./Layout/Button";
 
-export default function Skill() {
+export default function Skill({currentUser}:any) : JSX.Element {
   const [editEducation, setEditEducation] = useState({});
-  const { selectedUser } = useAllUserContext();
+
 
   const utils = trpc.useContext();
   const { data, isLoading } = trpc.useQuery([
     "skill.getById",
-    { id: selectedUser?.id },
+    { id: currentUser?.id },
   ]);
   const [addSkill, setAddSkill] = useState(false);
 
@@ -35,7 +35,7 @@ export default function Skill() {
     <div className='mt-6'>
       <Heading heading='Skills' />
       {addSkill && (
-        <AddSkill onShowSkill={onShowSkill} selectedUser={selectedUser} />
+        <AddSkill onShowSkill={onShowSkill} currentUser={currentUser} />
       )}
       <ViewSkills skills={data} onShowSkill={onShowSkill} />
     </div>
@@ -121,7 +121,7 @@ function ViewSkills({ skills, onShowSkill }: any) {
   );
 }
 
-function AddSkill({ onShowSkill, selectedUser }: any) {
+function AddSkill({ onShowSkill, currentUser }: any) {
   const client = trpc.useContext();
   const {
     register,
@@ -133,7 +133,7 @@ function AddSkill({ onShowSkill, selectedUser }: any) {
   const { mutate: addSkill, isLoading } = trpc.useMutation(["skill.add"], {
     onSuccess: () => {
       toast.success("Add Skill Successful");
-      client.invalidateQueries(["skill.getById", { id: selectedUser?.id }]);
+      client.invalidateQueries(["skill.getById", { id: currentUser?.id }]);
     },
   });
 
@@ -141,7 +141,7 @@ function AddSkill({ onShowSkill, selectedUser }: any) {
     try {
       addSkill({
         ...data,
-        userId: selectedUser?.id,
+        userId: currentUser?.id,
       });
       onShowSkill();
     } catch (error) {
