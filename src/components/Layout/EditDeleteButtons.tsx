@@ -5,7 +5,7 @@ import { GrEdit } from 'react-icons/gr';
 import { trpc } from '../../utils/trpc';
 
 type PropTypes = {
-  onClose: () => void;
+  onClose: any;
   onEdit: () => void;
   deleteItem: any;
   invalidateQueries: any;
