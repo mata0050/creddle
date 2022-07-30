@@ -4,14 +4,6 @@ import { AiFillCloseCircle, AiOutlineDelete } from 'react-icons/ai';
 import { GrEdit } from 'react-icons/gr';
 import { trpc } from '../../utils/trpc';
 
-type PropTypes = {
-  onClose: any;
-  onEdit: () => void;
-  deleteItem: any;
-  invalidateQueries: any;
-  trpcString: any;
-  queryID: any;
-};
 
 export default function EditDeleteButtons({
   onClose,
@@ -20,7 +12,7 @@ export default function EditDeleteButtons({
   invalidateQueries,
   trpcString,
   queryID,
-}: PropTypes) {
+}: any) {
   const client = trpc.useContext();
   const { mutate: deleteEducation, isLoading } = trpc.useMutation(
     [trpcString],
