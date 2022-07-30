@@ -8,7 +8,6 @@ import Input from './Layout/Input';
 import TextArea from './Layout/TextArea';
 import FormButton from './Layout/FormButton';
 import Form from './Layout/Form';
-
 import Heading from './Layout/Heading';
 import { UserProfileType } from '~/types/UserTypes';
 

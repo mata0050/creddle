@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function TextArea({ label, register }: any) {
+type Props = {
+  label: string;
+  register: any;
+};
+
+export default function TextArea({ label, register }: Props) {
   return (
     <label className="block">
       <span className="text-gray-700">{label}</span>
