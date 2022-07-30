@@ -87,10 +87,7 @@ export const skillRouter = createRouter()
     input: z.object({
       id: z.string(),
       name: z.string(),
-      skill: z.enum(["FRAMEWORKS", "SYSTEMS", "PROJECT"]),
-      createdAt: z.date(),
-      updatedAt: z.date(),
-      userId: z.string(),
+      skill: z.enum(["FRAMEWORKS", "SYSTEMS", "LANGUAGES"]),
     }),
     async resolve({ input }) {
       const skill = await prisma.skill.update({

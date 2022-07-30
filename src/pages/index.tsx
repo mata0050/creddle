@@ -16,6 +16,7 @@ export default function Home<NextPage>() {
       <div className='p-10 bg-white box-shadow'>
         <BasicInformation currentUser={currentUser} />
         <Education currentUser={currentUser} />
+        <Skill currentUser={currentUser} />
         <Project currentUser={currentUser} />
       </div>
     </div>

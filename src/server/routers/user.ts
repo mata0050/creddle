@@ -57,31 +57,7 @@ export const userRouter = createRouter()
         });
       }
 
-      // let newUser = user
- 
-
-      // const skills: Skills = {
-      //   frameworks: [],
-      //   system: [],
-      //   languages: [],
-      // };
-      
-
-      // user.skills.forEach((skill: Skill) => {
-      //   if (skill.skill === "FRAMEWORKS") {
-      //     skills.frameworks.push(skill);
-      //   } else if (skill.skill === "SYSTEMS") {
-      //     skills.system.push(skill);
-      //   } else {
-      //     skills.languages.push(skill);
-      //   }
-      // });
-
-      // delete newUser?.skills 
-
-      
-console.log(user)
-
+    
       return user;
     },
   })
