@@ -86,7 +86,6 @@ function ViewSkills({
   };
 
   const onEdit = () => {
-    // selectItem();
     onShowAddEditForm(true);
     onShowEditDeleteButton();
   };
@@ -108,27 +107,32 @@ function ViewSkills({
       }
     });
 
-  const Skills = ({ title, skills, section }: any) => (
+  const Skills = ({
+    title,
+    skills,
+  }: {
+    title: string;
+    skills: SkillType[];
+  }) => (
     <>
       <h1 className='text-xl uppercase my-4'>{title}</h1>
 
       <div className='flex gap-3 flex-wrap'>
-        {skills.frameworks !== 0 &&
-          skills[section].map((skill: any) => (
-            <p
-              key={skill.id}
-              onClick={() =>
-                selectItem({
-                  id: skill.id,
-                  name: skill.name,
-                  skill: skill.skill,
-                })
-              }
-              className='opacity-70 border border-black px-3 rounded inline-block'
-            >
-              {skill.name}
-            </p>
-          ))}
+        {skills.map((skill: SkillType) => (
+          <p
+            key={skill.id}
+            onClick={() =>
+              selectItem({
+                id: skill.id,
+                name: skill.name,
+                skill: skill.skill,
+              })
+            }
+            className='opacity-70 border border-black px-3 rounded inline-block'
+          >
+            {skill.name}
+          </p>
+        ))}
       </div>
     </>
   );
@@ -140,23 +144,15 @@ function ViewSkills({
           <Button title='Add Skill' onClick={() => onShowAddEditForm(true)} />
 
           {skillsSplit.frameworks.length !== 0 && (
-            <Skills
-              title='Frameworks'
-              skills={skillsSplit}
-              section='frameworks'
-            />
+            <Skills title='Frameworks' skills={skillsSplit.frameworks} />
           )}
 
           {skillsSplit.system.length !== 0 && (
-            <Skills title='Systems' skills={skillsSplit} section='system' />
+            <Skills title='Systems' skills={skillsSplit.system} />
           )}
 
           {skillsSplit.languages.length !== 0 && (
-            <Skills
-              title='Languages'
-              skills={skillsSplit}
-              section='languages'
-            />
+            <Skills title='Languages' skills={skillsSplit.languages} />
           )}
         </>
       )}
@@ -181,7 +177,6 @@ type AddSkillsProps = {
   selectedItem: SelectedItemTypes;
   resetSelectedItem: () => void;
 };
-
 
 function AddSkill({
   onShowAddEditForm,
