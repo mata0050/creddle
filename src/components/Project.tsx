@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { trpc } from "../utils/trpc";
-import { useForm } from "react-hook-form";
-import superjson from "superjson";
-import moment from "moment";
-import toast from "react-hot-toast";
-import { DatePicker } from "@mantine/dates";
-import { AiFillCloseCircle } from "react-icons/ai";
-import { GrEdit } from "react-icons/gr";
-import { AiOutlineDelete } from "react-icons/ai";
-import Input from "./Layout/Input";
-import Form from "./Layout/Form";
-import FormButton from "./Layout/FormButton";
-import EditDeleteButtons from "./Layout/EditDeleteButtons";
-import { useAllUserContext } from "~/context/UserContext";
-import Heading from "./Layout/Heading";
-import Button from "./Layout/Button";
-import TextArea from "./Layout/TextArea";
+import React, { useEffect, useState } from 'react';
+import { trpc } from '../utils/trpc';
+import { useForm } from 'react-hook-form';
+import superjson from 'superjson';
+import moment from 'moment';
+import toast from 'react-hot-toast';
+import { DatePicker } from '@mantine/dates';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { GrEdit } from 'react-icons/gr';
+import { AiOutlineDelete } from 'react-icons/ai';
+import Input from './Layout/Input';
+import Form from './Layout/Form';
+import FormButton from './Layout/FormButton';
+import EditDeleteButtons from './Layout/EditDeleteButtons';
+import { UserProfileType } from '~/context/UserContext';
+import Heading from './Layout/Heading';
+import Button from './Layout/Button';
+import TextArea from './Layout/TextArea';
 
-export default function Project({currentUser}:any) : JSX.Element {
-
+export default function Project({
+  currentUser,
+}: {
+  currentUser: UserProfileType;
+}): JSX.Element {
   const [editProject, setEditProject] = useState({});
   const [showAddEditProject, setShowAddEditProject] = useState(false);
 
-  const onShowAddEditProject = () => setShowAddEditProject((prevState) => !prevState);
-
-  const utils = trpc.useContext();
-  const { data, isLoading } = trpc.useQuery([
-    "project.getById",
-    { id: currentUser?.id },
-  ]);
+  const onShowAddEditProject = () =>
+    setShowAddEditProject((prevState) => !prevState);
 
   return (
     <div className='mt-8'>
@@ -48,7 +46,7 @@ export default function Project({currentUser}:any) : JSX.Element {
 
       {showAddEditProject || (
         <ViewProject
-          projects={data}
+          projects={currentUser?.projects}
           onClick={setEditProject}
           onShowAddEditProject={onShowAddEditProject}
           currentUser={currentUser}
@@ -57,6 +55,14 @@ export default function Project({currentUser}:any) : JSX.Element {
     </div>
   );
 }
+
+// function Index({chidren}:a) {
+//   return(
+//     <div>
+//       {children}
+//     </div>
+//   )
+// }
 
 function HeadingProject({ onShowAddEditProject, setEditProject }: any) {
   return (
@@ -73,8 +79,12 @@ function HeadingProject({ onShowAddEditProject, setEditProject }: any) {
   );
 }
 
-function ViewProject({ projects, onClick, onShowAddEditProject, currentUser }: any) {
-
+function ViewProject({
+  projects,
+  onClick,
+  onShowAddEditProject,
+  currentUser,
+}: any) {
   const [showEditDeleteButton, setShowEditDeleteButton] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
 
@@ -82,7 +92,6 @@ function ViewProject({ projects, onClick, onShowAddEditProject, currentUser }: a
     setShowEditDeleteButton((prevState) => !prevState);
     setSelectedProject(project);
   };
-
 
   const onEdit = () => {
     onClick(selectedProject);
@@ -110,7 +119,8 @@ function ViewProject({ projects, onClick, onShowAddEditProject, currentUser }: a
             key={project.id}
             onClick={() => {
               onClickEditDeleteButton(project);
-            }}>
+            }}
+          >
             <div className='flex justify-between mb-2'>
               <h3 className='text-xl '>{project.name}</h3>
               <p className='w-36 text-ellipsis overflow-hidden'>
@@ -120,11 +130,11 @@ function ViewProject({ projects, onClick, onShowAddEditProject, currentUser }: a
 
             <div className='flex items-center gap-2 mb-2'>
               <p className='text-sm'>
-                {moment(project.startDate).format("MMMM Do YYYY")}
+                {moment(project.startDate).format('MMMM Do YYYY')}
               </p>
               <span>to</span>
               <p className='text-sm'>
-                {moment(project.endDate).format("MMMM Do YYYY")}
+                {moment(project.endDate).format('MMMM Do YYYY')}
               </p>
             </div>
 
@@ -149,18 +159,18 @@ function AddEditProject({
   );
 
   const client = trpc.useContext();
-  const { mutate: addProject, isLoading } = trpc.useMutation(["project.add"], {
+  const { mutate: addProject, isLoading } = trpc.useMutation(['project.add'], {
     onSuccess: () => {
-      toast.success("Adding Project Successful");
-      client.invalidateQueries(["project.getById", { id: currentUser.id }]);
+      toast.success('Adding Project Successful');
+      client.invalidateQueries(['project.getById', { id: currentUser.id }]);
     },
   });
 
   const { mutate: editProjectMutation, isLoading: editLoading } =
-    trpc.useMutation(["project.edit"], {
+    trpc.useMutation(['project.edit'], {
       onSuccess: () => {
-        toast.success("Edit Project Successful");
-        client.invalidateQueries(["project.getById", { id: currentUser.id }]);
+        toast.success('Edit Project Successful');
+        client.invalidateQueries(['project.getById', { id: currentUser.id }]);
       },
     });
 
@@ -192,7 +202,7 @@ function AddEditProject({
       });
       onShowAddEditProject();
     } catch (error) {
-      toast.error("Please Filling out the project again");
+      toast.error('Please Filling out the project again');
     }
   };
 
@@ -213,7 +223,7 @@ function AddEditProject({
 
         <Input
           label='Name'
-          register={register("name", {
+          register={register('name', {
             required: true,
             value: editProject?.name,
           })}
@@ -221,7 +231,7 @@ function AddEditProject({
 
         <Input
           label='Link'
-          register={register("link", {
+          register={register('link', {
             required: true,
             value: editProject?.link,
           })}
@@ -245,7 +255,7 @@ function AddEditProject({
 
         <TextArea
           label='Description'
-          register={register("description", {
+          register={register('description', {
             required: true,
             value: editProject?.description,
           })}

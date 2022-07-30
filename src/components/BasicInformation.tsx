@@ -10,11 +10,15 @@ import FormButton from './Layout/FormButton';
 import Form from './Layout/Form';
 
 import Heading from './Layout/Heading';
+import { UserProfileType } from '~/context/UserContext';
 
-export default function BasicInformation({currentUser}:any) : JSX.Element {
+export default function BasicInformation({
+  currentUser,
+}: {
+  currentUser: UserProfileType;
+}): JSX.Element {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
-
 
   return (
     <>
@@ -35,19 +39,18 @@ export default function BasicInformation({currentUser}:any) : JSX.Element {
 }
 
 function CreateEditUser({ onShowCreateUser, user }: any) {
-
   const client = trpc.useContext();
   const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
       toast.success('Registration Successful');
-      client.invalidateQueries("user.getAllUsers");
+      client.invalidateQueries('user.getById');
     },
   });
 
   const { mutate: editUser } = trpc.useMutation(['user.edit'], {
     onSuccess: () => {
       toast.success('Edit User Successful');
-      client.invalidateQueries("user.getAllUsers");
+      client.invalidateQueries('user.getById');
     },
   });
 

@@ -39,13 +39,19 @@ type Education = {
   userId: string | null;
 };
 
-type Skill = {
+export type Skill = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   userId: string | null;
   name: string;
   skill: string;
+};
+
+export type Skills = {
+  frameworks: Skill[];
+  system: Skill[];
+  languages: Skill[];
 };
 
 type Project = {

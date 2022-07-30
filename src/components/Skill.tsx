@@ -7,29 +7,18 @@ import Input from "./Layout/Input";
 import Form from "./Layout/Form";
 import FormButton from "./Layout/FormButton";
 import EditDeleteButtons from "./Layout/EditDeleteButtons";
-import { useAllUserContext } from "~/context/UserContext";
+import {  UserProfileType } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
 import Button from "./Layout/Button";
 
-export default function Skill({currentUser}:any) : JSX.Element {
+export default function Skill({currentUser}:{currentUser: UserProfileType}) : JSX.Element {
   const [editEducation, setEditEducation] = useState({});
-
-
-  const utils = trpc.useContext();
-  const { data, isLoading } = trpc.useQuery([
-    "skill.getById",
-    { id: currentUser?.id },
-  ]);
   const [addSkill, setAddSkill] = useState(false);
-
   const onShowSkill = () => setAddSkill((prevState) => !prevState);
-
   const [createEditEducation, setCreateEditEducation] = useState(false);
 
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
-
-  if (isLoading || !data) return <div>Loading...</div>;
 
   return (
     <div className='mt-6'>
@@ -37,7 +26,7 @@ export default function Skill({currentUser}:any) : JSX.Element {
       {addSkill && (
         <AddSkill onShowSkill={onShowSkill} currentUser={currentUser} />
       )}
-      <ViewSkills skills={data} onShowSkill={onShowSkill} />
+      <ViewSkills skills={currentUser?.skills} onShowSkill={onShowSkill} />
     </div>
   );
 }

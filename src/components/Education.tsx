@@ -13,21 +13,12 @@ import Heading from './Layout/Heading';
 import Button from './Layout/Button';
 import { UserProfileType } from '~/context/UserContext';
 
-export default function Education({ currentUser }: any): JSX.Element {
+export default function Education({ currentUser }: {currentUser: UserProfileType}): JSX.Element {
   const [editEducation, setEditEducation] = useState({});
-
-  const { data, isLoading } = trpc.useQuery([
-    'education.getById',
-    { id: currentUser?.id },
-  ]);
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
-  if (!currentUser || !data) return <div>Loading...</div>;
-
-  console.log(data);
-  console.log(currentUser);
 
   return (
     <div className='mt-6'>
@@ -44,7 +35,7 @@ export default function Education({ currentUser }: any): JSX.Element {
 
       {!createEditEducation && (
         <>
-          {currentUser.education.map((data: any, index: any) => (
+          {currentUser?.education.map((data: any, index: any) => (
             <div key={index}>
               <ViewEducation
                 education={data}

@@ -6,8 +6,8 @@ import Skill from '~/components/Skill';
 import { trpc } from '~/utils/trpc';
 
 export default function Home<NextPage>() {
-  const { data, isLoading } = trpc.useQuery(['user.getAllUsers']);
-  const currentUser  = data !== undefined ? data[0] : undefined ;
+  const { data, isLoading } = trpc.useQuery(['user.getById', { id: '4e06def1-53e4-436a-894d-7260814df125' }]);
+  const currentUser  = data !== undefined ? data : undefined ;
   console.log('data', currentUser);
 
   if (!currentUser || isLoading) return <div>Loading...</div>;
@@ -19,7 +19,7 @@ export default function Home<NextPage>() {
           <SelectUser/> */}
         <BasicInformation currentUser={currentUser} />
         <Education currentUser={currentUser} />
-        <Skill currentUser={currentUser} />
+        {/* <Skill currentUser={currentUser} /> */}
         <Project currentUser={currentUser} />
         {/* </UserContextProvided> */}
       </div>
