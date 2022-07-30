@@ -125,7 +125,7 @@ function DeleteEducation({
       onClose={() => setShowDeleteButton(false)}
       onEdit={onEdit}
       trpcString='education.delete'
-      invalidateQueries='education.getById'
+      invalidateQueries='user.getById'
       queryID={currentUser.id}
       deleteItem={education}
     />
@@ -156,7 +156,7 @@ function CreateEditEducation({
     {
       onSuccess: () => {
         toast.success('Adding Education Successful');
-        client.invalidateQueries(['education.getById', { id: currentUser.id }]);
+        client.invalidateQueries(['user.getById', { id: currentUser.id }]);
       },
     }
   );
@@ -164,7 +164,7 @@ function CreateEditEducation({
   const { mutate: editUser } = trpc.useMutation(['education.edit'], {
     onSuccess: () => {
       toast.success('Edit Education Successful');
-      client.invalidateQueries(['education.getById', { id: currentUser.id }]);
+      client.invalidateQueries(['user.getById', { id: currentUser.id }]);
     },
   });
 

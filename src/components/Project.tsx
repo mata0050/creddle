@@ -56,13 +56,6 @@ export default function Project({
   );
 }
 
-// function Index({chidren}:a) {
-//   return(
-//     <div>
-//       {children}
-//     </div>
-//   )
-// }
 
 function HeadingProject({ onShowAddEditProject, setEditProject }: any) {
   return (
@@ -105,7 +98,7 @@ function ViewProject({
           onClose={onClickEditDeleteButton}
           onEdit={onEdit}
           trpcString='project.delete'
-          invalidateQueries='project.getById'
+          invalidateQueries='user.getById'
           queryID={currentUser.id}
           deleteItem={selectedProject}
         />
@@ -162,7 +155,7 @@ function AddEditProject({
   const { mutate: addProject, isLoading } = trpc.useMutation(['project.add'], {
     onSuccess: () => {
       toast.success('Adding Project Successful');
-      client.invalidateQueries(['project.getById', { id: currentUser.id }]);
+      client.invalidateQueries(['user.getById', { id: currentUser.id }]);
     },
   });
 
@@ -170,7 +163,7 @@ function AddEditProject({
     trpc.useMutation(['project.edit'], {
       onSuccess: () => {
         toast.success('Edit Project Successful');
-        client.invalidateQueries(['project.getById', { id: currentUser.id }]);
+        client.invalidateQueries(['user.getById', { id: currentUser.id }]);
       },
     });
 

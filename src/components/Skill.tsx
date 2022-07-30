@@ -1,17 +1,21 @@
-import React, { useState } from "react";
-import { trpc } from "../utils/trpc";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { AiFillCloseCircle } from "react-icons/ai";
-import Input from "./Layout/Input";
-import Form from "./Layout/Form";
-import FormButton from "./Layout/FormButton";
-import EditDeleteButtons from "./Layout/EditDeleteButtons";
-import {  UserProfileType } from "~/context/UserContext";
-import Heading from "./Layout/Heading";
-import Button from "./Layout/Button";
+import React, { useState } from 'react';
+import { trpc } from '../utils/trpc';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import Input from './Layout/Input';
+import Form from './Layout/Form';
+import FormButton from './Layout/FormButton';
+import EditDeleteButtons from './Layout/EditDeleteButtons';
+import { UserProfileType } from '~/context/UserContext';
+import Heading from './Layout/Heading';
+import Button from './Layout/Button';
 
-export default function Skill({currentUser}:{currentUser: UserProfileType}) : JSX.Element {
+export default function Skill({
+  currentUser,
+}: {
+  currentUser: UserProfileType;
+}): JSX.Element {
   const [editEducation, setEditEducation] = useState({});
   const [addSkill, setAddSkill] = useState(false);
   const onShowSkill = () => setAddSkill((prevState) => !prevState);
@@ -37,9 +41,9 @@ function ViewSkills({ skills, onShowSkill }: any) {
   const onShowEditDeleteButton = () =>
     setShowEditDeleteButton((prevState) => !prevState);
   const [selectedItem, setSelectedItem] = useState({
-    id: "",
-    name: "",
-    skill: "",
+    id: '',
+    name: '',
+    skill: '',
   });
 
   const selectItem = ({ id, name, skill }: any) => {
@@ -68,7 +72,8 @@ function ViewSkills({ skills, onShowSkill }: any) {
                   skill: skill.skill,
                 })
               }
-              className='opacity-70 border border-black px-3 rounded inline-block'>
+              className='opacity-70 border border-black px-3 rounded inline-block'
+            >
               {skill.name}
             </p>
           ))}
@@ -99,9 +104,9 @@ function ViewSkills({ skills, onShowSkill }: any) {
       {showEditDeleteButton && (
         <EditDeleteButtons
           onClose={onShowEditDeleteButton}
-          onEdit={""}
+          onEdit={''}
           trpcString='skill.delete'
-          invalidateQueries='skill.getById'
+          invalidateQueries='user.getById'
           queryID='4e06def1-53e4-436a-894d-7260814df125'
           deleteItem={selectedItem}
         />
@@ -119,10 +124,10 @@ function AddSkill({ onShowSkill, currentUser }: any) {
     reset,
   } = useForm();
 
-  const { mutate: addSkill, isLoading } = trpc.useMutation(["skill.add"], {
+  const { mutate: addSkill, isLoading } = trpc.useMutation(['skill.add'], {
     onSuccess: () => {
-      toast.success("Add Skill Successful");
-      client.invalidateQueries(["skill.getById", { id: currentUser?.id }]);
+      toast.success('Add Skill Successful');
+      client.invalidateQueries(['user.getById', { id: currentUser?.id }]);
     },
   });
 
@@ -134,7 +139,7 @@ function AddSkill({ onShowSkill, currentUser }: any) {
       });
       onShowSkill();
     } catch (error) {
-      toast.error("Please try again");
+      toast.error('Please try again');
     }
   };
 
@@ -156,18 +161,19 @@ function AddSkill({ onShowSkill, currentUser }: any) {
       </div>
 
       <Input
-        label={"Name"}
-        register={register("name", {
+        label={'Name'}
+        register={register('name', {
           required: true,
-          value: "",
+          value: '',
         })}
       />
 
       <label className='block'>
         <span className='text-gray-700'>Skill Section</span>
         <select
-          {...register("skill", { value: "" })}
-          className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>
+          {...register('skill', { value: '' })}
+          className='mt-1 block w-full h-8 px-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+        >
           <option value='FRAMEWORKS'>Framework</option>
           <option value='SYSTEMS'>Systems</option>
           <option value='LANGUAGES'>Languages</option>
