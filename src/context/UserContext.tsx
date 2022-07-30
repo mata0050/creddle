@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import { trpc } from "../utils/trpc";
+import { createContext, useContext, useState } from 'react';
+import { trpc } from '../utils/trpc';
 
 type UserType = {
   id: string;
@@ -10,7 +10,6 @@ type UserType = {
   location: string;
   phone: string;
 };
-
 
 type UsersContextType =
   | (UserType & {
@@ -75,19 +74,19 @@ type EmploymentType = {
 
 type GlobalContentType = {
   selectedUser: UserContextType;
-  setSelectedUser: (user: UserContextType) => void;
   allUsers: UsersContextType;
+  refetchAllUsers: () => void;
 };
 
 export const UserContext = createContext<GlobalContentType>({
   selectedUser: undefined,
-  setSelectedUser: () => {},
   allUsers: undefined,
+  refetchAllUsers: () => {},
 });
 
 export function UserContextProvided({ children }: any) {
   const utils = trpc.useContext();
-  const { data, isLoading } = trpc.useQuery(["user.getAllUsers"]);
+  const { data, isLoading } = trpc.useQuery(['user.getAllUsers']);
 
   let allUsers = data as UsersContextType;
 
@@ -95,10 +94,17 @@ export function UserContextProvided({ children }: any) {
     allUsers !== undefined ? allUsers[0] : undefined
   );
 
+  const refetchAllUsers = () => {
+    const { data, isLoading } = trpc.useQuery(['user.getAllUsers']);
+    const allUsers = data as UsersContextType;
+    setSelectedUser(allUsers !== undefined ? allUsers[0] : undefined);
+  };
+
   return (
     <div>
       <UserContext.Provider
-        value={{ selectedUser, setSelectedUser, allUsers: data }}>
+        value={{ selectedUser, allUsers: data, refetchAllUsers }}
+      >
         {children}
       </UserContext.Provider>
     </div>
