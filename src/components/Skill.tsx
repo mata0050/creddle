@@ -7,7 +7,7 @@ import Input from './Layout/Input';
 import Form from './Layout/Form';
 import FormButton from './Layout/FormButton';
 import EditDeleteButtons from './Layout/EditDeleteButtons';
-import { UserProfileType } from '~/context/UserContext';
+import { UserProfileType } from '~/types/UserTypes';
 import Heading from './Layout/Heading';
 import Button from './Layout/Button';
 

@@ -10,7 +10,7 @@ import FormButton from './Layout/FormButton';
 import Form from './Layout/Form';
 
 import Heading from './Layout/Heading';
-import { UserProfileType } from '~/context/UserContext';
+import { UserProfileType } from '~/types/UserTypes';
 
 export default function BasicInformation({
   currentUser,

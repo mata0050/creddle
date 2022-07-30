@@ -11,7 +11,7 @@ import Form from './Layout/Form';
 import FormButton from './Layout/FormButton';
 import Heading from './Layout/Heading';
 import Button from './Layout/Button';
-import { UserProfileType } from '~/context/UserContext';
+import { UserProfileType } from '~/types/UserTypes';
 
 export default function Education({ currentUser }: {currentUser: UserProfileType}): JSX.Element {
   const [editEducation, setEditEducation] = useState({});
