@@ -19,6 +19,8 @@ export default function Education({ currentUser }: {currentUser: UserProfileType
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
+    console.log(currentUser)
+
 
   return (
     <div className='mt-6'>
@@ -120,13 +122,15 @@ function DeleteEducation({
     onCreateEditEducation();
   };
 
+
+  console.log(currentUser)
   return (
     <EditDeleteButtons
       onClose={() => setShowDeleteButton(false)}
       onEdit={onEdit}
       trpcString='education.delete'
       invalidateQueries='user.getById'
-      queryID={currentUser.id}
+      queryID={currentUser?.id}
       deleteItem={education}
     />
   );

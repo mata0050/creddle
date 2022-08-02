@@ -9,8 +9,7 @@ export type User = {
   location: string;
   phone: string;
 };
-
-
+  
 
 export type UserProfileType =
   | (User & {

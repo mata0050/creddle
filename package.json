@@ -11,7 +11,9 @@
     "db:reset": "npx prisma db push --force-reset",
     "db:push": "npx prisma db push",
     "postinstall": "prisma generate",
-    "db:connect": "pscale connect creddle"
+    "db:connect": "pscale connect creddle",
+    "db:login":"pscale auth login ",
+    "db:logout":"pscale auth logout"
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",

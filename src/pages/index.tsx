@@ -9,6 +9,7 @@ export default function Home<NextPage>() {
   const currentUser  = data !== undefined ? data : undefined ;
 
 
+
   if (!currentUser || isLoading) return <div>Loading...</div>;
 
   return (
