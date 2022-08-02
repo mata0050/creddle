@@ -52,4 +52,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Education delete is not refreshing data.
 - [ ] Add skill button current user id not being passed.
 - [ ] Side Nav not linked
-- [x] Add different themes
+- [ ] Add different themes
