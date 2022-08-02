@@ -49,7 +49,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Bugs and Fixes To Work On
 
-- [x] Education delete is not refreshing data.
-- [x] Add skill button current user id not being passed.
-- [x] Side Nav not linked
-- [x] Add different themes
+- [ ] Education delete is not refreshing data.
+- [ ] Add skill button current user id not being passed.
+- [ ] Side Nav not linked
+- [ ] Add different themes
