@@ -14,6 +14,7 @@ install dependencies
 ## Step 2
 
 Create a .env file and add the following
+
 ```env
 DATABASE_URL="mysql://localhost:3306/creddle"
 ``` 
