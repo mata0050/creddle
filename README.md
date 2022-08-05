@@ -13,13 +13,20 @@ install dependencies
 
 ## Step 2
 
+Create a .env file and add the following
+```env
+DATABASE_URL="mysql://localhost:3306/creddle"
+``` 
+
+## Step 3
+
 Create an account a [planetscale.com](https://planetscale.com/) and create a new database called **_creddle_**. Go to your terminal and login using:
 
 ```bash
   npm run db:login
 ```
 
-## Step 3
+## Step 4
 
 Push prisma scheme to Database
 
@@ -27,7 +34,7 @@ Push prisma scheme to Database
   npm run db:push
 ```
 
-## Step 4
+## Step 5
 
 Connect to Database
 
@@ -35,7 +42,7 @@ Connect to Database
   npm run db:connect
 ```
 
-## Step 4
+## Step 6
 
 Start app
 
