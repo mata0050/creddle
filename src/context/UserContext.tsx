@@ -11,7 +11,6 @@ type UserType = {
   phone: string;
 };
 
-
 type UsersContextType =
   | (UserType & {
       education: EducationType[];
@@ -98,7 +97,12 @@ export function UserContextProvided({ children }: any) {
   return (
     <div>
       <UserContext.Provider
-        value={{ selectedUser, setSelectedUser, allUsers: data }}>
+        value={{
+          selectedUser,
+          setSelectedUser,
+          allUsers,
+        }}>
+        <button>clock</button>
         {children}
       </UserContext.Provider>
     </div>
@@ -106,3 +110,16 @@ export function UserContextProvided({ children }: any) {
 }
 
 export const useAllUserContext = () => useContext(UserContext);
+
+export const useRefreshSelectedUser = (userId: string) => {
+  const utils = trpc.useContext();
+  const { data, isLoading } = trpc.useQuery(["user.getById", { id: userId }]);
+
+  let allUsers = data as UsersContextType;
+
+  const [selectedUser, setSelectedUser] = useState<UserContextType>(
+    allUsers !== undefined ? allUsers[0] : undefined
+  );
+
+  return { selectedUser, setSelectedUser };
+};

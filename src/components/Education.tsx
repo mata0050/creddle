@@ -13,23 +13,15 @@ import { useAllUserContext } from "~/context/UserContext";
 import Heading from "./Layout/Heading";
 import Button from "./Layout/Button";
 
-
 export default function Education() {
   const [editEducation, setEditEducation] = useState({});
-  const { selectedUser } = useAllUserContext();
+  const { selectedUser, getSelectedUser } = useAllUserContext();
 
-  const { data, isLoading } = trpc.useQuery([
-    "education.getById",
-    { id: selectedUser?.id },
-  ]);
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
-  if (!selectedUser || !data) return <div>Loading...</div>;
-
-  console.log(data)
-  console.log(selectedUser)
+  if (!selectedUser) return <div>Loading...</div>;
 
   return (
     <div className='mt-6'>
@@ -41,6 +33,7 @@ export default function Education() {
           editEducation={editEducation}
           setEditEducation={setEditEducation}
           selectedUser={selectedUser}
+          getSelectedUser={getSelectedUser}
         />
       )}
 
@@ -133,8 +126,8 @@ function DeleteEducation({
       onClose={() => setShowDeleteButton(false)}
       onEdit={onEdit}
       trpcString='education.delete'
-      invalidateQueries='education.getById'
-      queryID={selectedUser.id}
+      invalidateQueries='user.getAllUsers'
+      queryID={selectedUser?.id}
       deleteItem={education}
     />
   );
@@ -145,6 +138,7 @@ function CreateEditEducation({
   editEducation,
   setEditEducation,
   selectedUser,
+  getSelectedUser,
 }: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -164,10 +158,7 @@ function CreateEditEducation({
     {
       onSuccess: () => {
         toast.success("Adding Education Successful");
-        client.invalidateQueries([
-          "education.getById",
-          { id: selectedUser.id },
-        ]);
+        client.invalidateQueries(["user.getAllUsers"]);
       },
     }
   );
@@ -175,7 +166,7 @@ function CreateEditEducation({
   const { mutate: editUser } = trpc.useMutation(["education.edit"], {
     onSuccess: () => {
       toast.success("Edit Education Successful");
-      client.invalidateQueries(["education.getById", { id: selectedUser.id }]);
+      client.invalidateQueries(["user.getAllUsers"]);
     },
   });
 
