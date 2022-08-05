@@ -6,7 +6,7 @@ import { AppProps } from "next/app";
 import { AppType } from "next/dist/shared/lib/utils";
 import { ReactElement, ReactNode } from "react";
 import superjson from "superjson";
-import { DefaultLayout } from "../components/DefaultLayout";
+import { DefaultLayout } from "../components/Layout/DefaultLayout";
 import type { AppRouter } from "~/server/routers/_app";
 import "../../styles/tailwind.css";
 import "../../styles/delete-button-stylesheet.css";

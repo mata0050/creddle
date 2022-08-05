@@ -15,6 +15,21 @@ const defaultUserSelect = Prisma.validator<Prisma.UserSelect>()({
   summary: true,
 });
 
+type Skill = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string | null;
+  name: string;
+  skill: string;
+};
+
+type Skills = {
+  frameworks: Skill[];
+  system: Skill[];
+  languages: Skill[];
+};
+
 export const userRouter = createRouter()
   .query("getById", {
     input: z.object({
@@ -38,11 +53,11 @@ export const userRouter = createRouter()
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `No post with id '${id}'`,
+          message: `UNAUTHORIZED'`,
         });
       }
 
-
+    
       return user;
     },
   })
@@ -57,7 +72,7 @@ export const userRouter = createRouter()
         },
         // select: defaultUserSelect,
       });
-      console.log(users)
+
       return users;
     },
   })

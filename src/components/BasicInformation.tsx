@@ -1,35 +1,35 @@
-import { useState } from "react";
-import { trpc } from "../utils/trpc";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { GrEdit } from "react-icons/gr";
-import { AiFillCloseCircle } from "react-icons/ai";
-import Input from "./Layout/Input";
-import TextArea from "./Layout/TextArea";
-import FormButton from "./Layout/FormButton";
-import Form from "./Layout/Form";
-import { useAllUserContext } from "~/context/UserContext";
-import Heading from "./Layout/Heading";
+import { useState } from 'react';
+import { trpc } from '../utils/trpc';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { GrEdit } from 'react-icons/gr';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import Input from './Layout/Input';
+import TextArea from './Layout/TextArea';
+import FormButton from './Layout/FormButton';
+import Form from './Layout/Form';
+import Heading from './Layout/Heading';
+import { UserProfileType } from '~/types/UserTypes';
 
-export default function BasicInformation() {
-  const { selectedUser } = useAllUserContext();
-
+export default function BasicInformation({
+  currentUser,
+}: {
+  currentUser: UserProfileType;
+}): JSX.Element {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const onShowCreateUser = () => setShowCreateUser((prevSate) => !prevSate);
-
-  if (!selectedUser) return <div>Loading...</div>;
 
   return (
     <>
       {!showCreateUser && (
         <ViewBasicInformation
-          user={selectedUser}
+          user={currentUser}
           onShowCreateUser={onShowCreateUser}
         />
       )}
       {showCreateUser && (
         <CreateEditUser
-          user={selectedUser}
+          user={currentUser}
           onShowCreateUser={onShowCreateUser}
         />
       )}
@@ -39,24 +39,24 @@ export default function BasicInformation() {
 
 function CreateEditUser({ onShowCreateUser, user }: any) {
   const client = trpc.useContext();
-  const { mutate: newUser, isLoading } = trpc.useMutation(["user.add"], {
+  const { mutate: newUser, isLoading } = trpc.useMutation(['user.add'], {
     onSuccess: () => {
-      toast.success("Registration Successful");
-      client.invalidateQueries("user.getAllUsers");
+      toast.success('Registration Successful');
+      client.invalidateQueries('user.getById');
     },
   });
 
-  const { mutate: editUser } = trpc.useMutation(["user.edit"], {
+  const { mutate: editUser } = trpc.useMutation(['user.edit'], {
     onSuccess: () => {
-      toast.success("Edit User Successful");
-      client.invalidateQueries("user.getAllUsers");
+      toast.success('Edit User Successful');
+      client.invalidateQueries('user.getById');
     },
   });
 
   const onSubmit = async (data: any) => {
-    if (data.email.split("@")[1] !== "gmail.com") {
+    if (data.email.split('@')[1] !== 'gmail.com') {
       toast.error(
-        "Please make sure Student Email Address is a Gmail email address"
+        'Please make sure Student Email Address is a Gmail email address'
       );
     }
 
@@ -68,7 +68,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
       newUser(data);
       onShowCreateUser();
     } catch (error) {
-      toast.error("Please Filling out the application again");
+      toast.error('Please Filling out the application again');
     }
   };
 
@@ -93,7 +93,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 
         <Input
           label='First Name'
-          register={register("firstName", {
+          register={register('firstName', {
             required: true,
             value: user?.firstName,
           })}
@@ -101,7 +101,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 
         <Input
           label='Last Name'
-          register={register("lastName", {
+          register={register('lastName', {
             required: true,
             value: user?.lastName,
           })}
@@ -109,22 +109,22 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 
         <Input
           label='Phone Number'
-          register={register("phone", { required: true, value: user?.phone })}
+          register={register('phone', { required: true, value: user?.phone })}
         />
 
         <Input
           label='Email'
-          register={register("email", { required: true, value: user?.email })}
+          register={register('email', { required: true, value: user?.email })}
         />
 
         <Input
           label='Github Username'
-          register={register("github", { required: true, value: user?.github })}
+          register={register('github', { required: true, value: user?.github })}
         />
 
         <Input
           label='Location'
-          register={register("location", {
+          register={register('location', {
             required: true,
             value: user?.location,
           })}
@@ -132,7 +132,7 @@ function CreateEditUser({ onShowCreateUser, user }: any) {
 
         <TextArea
           label='Summary'
-          register={register("summary", {
+          register={register('summary', {
             required: true,
             value: user?.summary,
           })}
