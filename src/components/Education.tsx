@@ -13,13 +13,16 @@ import Heading from './Layout/Heading';
 import Button from './Layout/Button';
 import { UserProfileType } from '~/types/UserTypes';
 
+
 export default function Education({ currentUser }: {currentUser: UserProfileType}): JSX.Element {
   const [editEducation, setEditEducation] = useState({});
   const [createEditEducation, setCreateEditEducation] = useState(false);
   const onCreateEditEducation = () =>
     setCreateEditEducation((prevSate) => !prevSate);
 
+
     console.log(currentUser)
+
 
 
   return (
@@ -32,6 +35,7 @@ export default function Education({ currentUser }: {currentUser: UserProfileType
           editEducation={editEducation}
           setEditEducation={setEditEducation}
           currentUser={currentUser}
+
         />
       )}
 
@@ -131,7 +135,6 @@ function DeleteEducation({
       trpcString='education.delete'
       invalidateQueries='user.getById'
       queryID={currentUser?.id}
-      deleteItem={education}
     />
   );
 }
@@ -141,6 +144,7 @@ function CreateEditEducation({
   editEducation,
   setEditEducation,
   currentUser,
+
 }: any) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
@@ -161,14 +165,17 @@ function CreateEditEducation({
       onSuccess: () => {
         toast.success('Adding Education Successful');
         client.invalidateQueries(['user.getById', { id: currentUser.id }]);
+
       },
     }
   );
 
   const { mutate: editUser } = trpc.useMutation(['education.edit'], {
     onSuccess: () => {
-      toast.success('Edit Education Successful');
-      client.invalidateQueries(['user.getById', { id: currentUser.id }]);
+
+      toast.success("Edit Education Successful");
+      client.invalidateQueries(["user.getAllUsers"]);
+
     },
   });
 

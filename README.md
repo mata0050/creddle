@@ -1,4 +1,4 @@
-This is a live [creddle.vercel.app](https://creddle.vercel.app/) 
+This is a live [creddle.vercel.app](https://creddle.vercel.app/)
 
 # Getting Started
 
@@ -60,3 +60,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [ ] Add skill button current user id not being passed.
 - [ ] Side Nav not linked
 - [ ] Add different themes
+- [ ] Add Auth
